@@ -6,33 +6,295 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		7A590B542D590E840023D97A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A590B532D590E830023D97A /* WidgetKit.framework */; };
+		7A590B562D590E840023D97A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A590B552D590E840023D97A /* SwiftUI.framework */; };
+		7A590B672D590E860023D97A /* TodoWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7A590B512D590E830023D97A /* TodoWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7A590B802D590F2E0023D97A /* SharedModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A590B782D590F2D0023D97A /* SharedModels.framework */; };
+		7A590B812D590F2E0023D97A /* SharedModels.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7A590B782D590F2D0023D97A /* SharedModels.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7A590B8B2D590FC40023D97A /* SharedModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A590B782D590F2D0023D97A /* SharedModels.framework */; };
+		7A590B8C2D590FC40023D97A /* SharedModels.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7A590B782D590F2D0023D97A /* SharedModels.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7A863D272D5CEF13001D9896 /* SharedModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A590B782D590F2D0023D97A /* SharedModels.framework */; };
+		7A863D282D5CEF13001D9896 /* SharedModels.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7A590B782D590F2D0023D97A /* SharedModels.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7AC2B18C2D5B565E001BC7FA /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A590B532D590E830023D97A /* WidgetKit.framework */; };
+		7AC2B18D2D5B565E001BC7FA /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A590B552D590E840023D97A /* SwiftUI.framework */; };
+		7AC2B19C2D5B5660001BC7FA /* LockScreenWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7AC2B18B2D5B565E001BC7FA /* LockScreenWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7AF8A0AF2D592CA3005FE77E /* WidgetConfiguration.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 7AF8A0AE2D592CA3005FE77E /* WidgetConfiguration.intentdefinition */; };
+		7AF8A0B02D592CA3005FE77E /* WidgetConfiguration.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 7AF8A0AE2D592CA3005FE77E /* WidgetConfiguration.intentdefinition */; };
+		7AF8A0B12D592CA3005FE77E /* WidgetConfiguration.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 7AF8A0AE2D592CA3005FE77E /* WidgetConfiguration.intentdefinition */; };
+		7AF8A0C72D5943D2005FE77E /* ShareTodo.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7AF8A0BD2D5943D2005FE77E /* ShareTodo.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7AF8A0CF2D5949EF005FE77E /* SharedModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A590B782D590F2D0023D97A /* SharedModels.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7A590B652D590E860023D97A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7ACC69C22D586D2A007FF0FE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A590B502D590E830023D97A;
+			remoteInfo = TodoWidgetExtension;
+		};
+		7A590B7E2D590F2E0023D97A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7ACC69C22D586D2A007FF0FE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A590B772D590F2D0023D97A;
+			remoteInfo = SharedModels;
+		};
+		7A590B8D2D590FC40023D97A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7ACC69C22D586D2A007FF0FE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A590B772D590F2D0023D97A;
+			remoteInfo = SharedModels;
+		};
+		7A863D292D5CEF13001D9896 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7ACC69C22D586D2A007FF0FE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A590B772D590F2D0023D97A;
+			remoteInfo = SharedModels;
+		};
+		7AC2B19A2D5B5660001BC7FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7ACC69C22D586D2A007FF0FE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7AC2B18A2D5B565E001BC7FA;
+			remoteInfo = LockScreenWidgetExtension;
+		};
+		7AF8A0C52D5943D2005FE77E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7ACC69C22D586D2A007FF0FE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7AF8A0BC2D5943D2005FE77E;
+			remoteInfo = ShareTodo;
+		};
+		7AF8A0CD2D5949E0005FE77E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7ACC69C22D586D2A007FF0FE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A590B772D590F2D0023D97A;
+			remoteInfo = SharedModels;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7A590B6C2D590E860023D97A /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				7AC2B19C2D5B5660001BC7FA /* LockScreenWidgetExtension.appex in Embed Foundation Extensions */,
+				7AF8A0C72D5943D2005FE77E /* ShareTodo.appex in Embed Foundation Extensions */,
+				7A590B672D590E860023D97A /* TodoWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A590B862D590F2E0023D97A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7A590B812D590F2E0023D97A /* SharedModels.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A590B8F2D590FC40023D97A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7A590B8C2D590FC40023D97A /* SharedModels.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A863CCC2D5CD98B001D9896 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A863D2B2D5CEF13001D9896 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7A863D282D5CEF13001D9896 /* SharedModels.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		7A590B512D590E830023D97A /* TodoWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TodoWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A590B532D590E830023D97A /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		7A590B552D590E840023D97A /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		7A590B782D590F2D0023D97A /* SharedModels.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SharedModels.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A590B952D5916540023D97A /* TodoWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TodoWidgetExtension.entitlements; sourceTree = "<group>"; };
+		7AC2B18B2D5B565E001BC7FA /* LockScreenWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockScreenWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AC2B1B62D5B6123001BC7FA /* LockScreenWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockScreenWidgetExtension.entitlements; sourceTree = "<group>"; };
 		7ACC69CA2D586D2A007FF0FE /* Something New.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Something New.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AF8A0AE2D592CA3005FE77E /* WidgetConfiguration.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = WidgetConfiguration.intentdefinition; sourceTree = "<group>"; };
+		7AF8A0BD2D5943D2005FE77E /* ShareTodo.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareTodo.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		7A590B682D590E860023D97A /* Exceptions for "TodoWidget" folder in "TodoWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 7A590B502D590E830023D97A /* TodoWidgetExtension */;
+		};
+		7A590B822D590F2E0023D97A /* Exceptions for "SharedModels" folder in "SharedModels" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			publicHeaders = (
+				SharedModels.h,
+			);
+			target = 7A590B772D590F2D0023D97A /* SharedModels */;
+		};
+		7AC2B19D2D5B5660001BC7FA /* Exceptions for "LockScreenWidget" folder in "LockScreenWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 7AC2B18A2D5B565E001BC7FA /* LockScreenWidgetExtension */;
+		};
+		7AF8A0C82D5943D2005FE77E /* Exceptions for "ShareTodo" folder in "ShareTodo" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 7AF8A0BC2D5943D2005FE77E /* ShareTodo */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		7A590B572D590E840023D97A /* TodoWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7A590B682D590E860023D97A /* Exceptions for "TodoWidget" folder in "TodoWidgetExtension" target */,
+			);
+			path = TodoWidget;
+			sourceTree = "<group>";
+		};
+		7A590B792D590F2D0023D97A /* SharedModels */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7A590B822D590F2E0023D97A /* Exceptions for "SharedModels" folder in "SharedModels" target */,
+			);
+			path = SharedModels;
+			sourceTree = "<group>";
+		};
+		7A863D112D5CE8E3001D9896 /* SharedModelsExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SharedModelsExtension;
+			sourceTree = "<group>";
+		};
+		7AC2B18E2D5B565E001BC7FA /* LockScreenWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7AC2B19D2D5B5660001BC7FA /* Exceptions for "LockScreenWidget" folder in "LockScreenWidgetExtension" target */,
+			);
+			path = LockScreenWidget;
+			sourceTree = "<group>";
+		};
 		7ACC69CC2D586D2A007FF0FE /* Something New */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "Something New";
 			sourceTree = "<group>";
 		};
+		7AF8A0BE2D5943D2005FE77E /* ShareTodo */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7AF8A0C82D5943D2005FE77E /* Exceptions for "ShareTodo" folder in "ShareTodo" target */,
+			);
+			path = ShareTodo;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		7ACC69C72D586D2A007FF0FE /* Frameworks */ = {
+		7A590B4E2D590E830023D97A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A590B562D590E840023D97A /* SwiftUI.framework in Frameworks */,
+				7A590B542D590E840023D97A /* WidgetKit.framework in Frameworks */,
+				7A590B8B2D590FC40023D97A /* SharedModels.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A590B752D590F2D0023D97A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7AC2B1882D5B565E001BC7FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AC2B18D2D5B565E001BC7FA /* SwiftUI.framework in Frameworks */,
+				7AC2B18C2D5B565E001BC7FA /* WidgetKit.framework in Frameworks */,
+				7A863D272D5CEF13001D9896 /* SharedModels.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7ACC69C72D586D2A007FF0FE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A590B802D590F2E0023D97A /* SharedModels.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AF8A0BA2D5943D2005FE77E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AF8A0CF2D5949EF005FE77E /* SharedModels.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7A590B522D590E830023D97A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7A590B532D590E830023D97A /* WidgetKit.framework */,
+				7A590B552D590E840023D97A /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		7ACC69C12D586D2A007FF0FE = {
 			isa = PBXGroup;
 			children = (
+				7AC2B1B62D5B6123001BC7FA /* LockScreenWidgetExtension.entitlements */,
+				7AF8A0AE2D592CA3005FE77E /* WidgetConfiguration.intentdefinition */,
+				7A590B952D5916540023D97A /* TodoWidgetExtension.entitlements */,
 				7ACC69CC2D586D2A007FF0FE /* Something New */,
+				7A590B572D590E840023D97A /* TodoWidget */,
+				7A590B792D590F2D0023D97A /* SharedModels */,
+				7AF8A0BE2D5943D2005FE77E /* ShareTodo */,
+				7AC2B18E2D5B565E001BC7FA /* LockScreenWidget */,
+				7A863D112D5CE8E3001D9896 /* SharedModelsExtension */,
+				7A590B522D590E830023D97A /* Frameworks */,
 				7ACC69CB2D586D2A007FF0FE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,13 +303,98 @@
 			isa = PBXGroup;
 			children = (
 				7ACC69CA2D586D2A007FF0FE /* Something New.app */,
+				7A590B512D590E830023D97A /* TodoWidgetExtension.appex */,
+				7A590B782D590F2D0023D97A /* SharedModels.framework */,
+				7AF8A0BD2D5943D2005FE77E /* ShareTodo.appex */,
+				7AC2B18B2D5B565E001BC7FA /* LockScreenWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		7A590B732D590F2D0023D97A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		7A590B502D590E830023D97A /* TodoWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A590B692D590E860023D97A /* Build configuration list for PBXNativeTarget "TodoWidgetExtension" */;
+			buildPhases = (
+				7A590B4D2D590E830023D97A /* Sources */,
+				7A590B4E2D590E830023D97A /* Frameworks */,
+				7A590B4F2D590E830023D97A /* Resources */,
+				7A590B8F2D590FC40023D97A /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7A590B8E2D590FC40023D97A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				7A590B572D590E840023D97A /* TodoWidget */,
+			);
+			name = TodoWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = TodoWidgetExtension;
+			productReference = 7A590B512D590E830023D97A /* TodoWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		7A590B772D590F2D0023D97A /* SharedModels */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A590B832D590F2E0023D97A /* Build configuration list for PBXNativeTarget "SharedModels" */;
+			buildPhases = (
+				7A590B732D590F2D0023D97A /* Headers */,
+				7A590B742D590F2D0023D97A /* Sources */,
+				7A590B752D590F2D0023D97A /* Frameworks */,
+				7A590B762D590F2D0023D97A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				7A590B792D590F2D0023D97A /* SharedModels */,
+			);
+			name = SharedModels;
+			packageProductDependencies = (
+			);
+			productName = SharedModels;
+			productReference = 7A590B782D590F2D0023D97A /* SharedModels.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		7AC2B18A2D5B565E001BC7FA /* LockScreenWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7AC2B19E2D5B5660001BC7FA /* Build configuration list for PBXNativeTarget "LockScreenWidgetExtension" */;
+			buildPhases = (
+				7AC2B1872D5B565E001BC7FA /* Sources */,
+				7AC2B1882D5B565E001BC7FA /* Frameworks */,
+				7AC2B1892D5B565E001BC7FA /* Resources */,
+				7A863D2B2D5CEF13001D9896 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7A863D2A2D5CEF13001D9896 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				7AC2B18E2D5B565E001BC7FA /* LockScreenWidget */,
+			);
+			name = LockScreenWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = LockScreenWidgetExtension;
+			productReference = 7AC2B18B2D5B565E001BC7FA /* LockScreenWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		7ACC69C92D586D2A007FF0FE /* Something New */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7ACC69D82D586D2C007FF0FE /* Build configuration list for PBXNativeTarget "Something New" */;
@@ -55,10 +402,17 @@
 				7ACC69C62D586D2A007FF0FE /* Sources */,
 				7ACC69C72D586D2A007FF0FE /* Frameworks */,
 				7ACC69C82D586D2A007FF0FE /* Resources */,
+				7A590B6C2D590E860023D97A /* Embed Foundation Extensions */,
+				7A590B862D590F2E0023D97A /* Embed Frameworks */,
+				7A863CCC2D5CD98B001D9896 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				7A590B662D590E860023D97A /* PBXTargetDependency */,
+				7A590B7F2D590F2E0023D97A /* PBXTargetDependency */,
+				7AF8A0C62D5943D2005FE77E /* PBXTargetDependency */,
+				7AC2B19B2D5B5660001BC7FA /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				7ACC69CC2D586D2A007FF0FE /* Something New */,
@@ -70,6 +424,29 @@
 			productReference = 7ACC69CA2D586D2A007FF0FE /* Something New.app */;
 			productType = "com.apple.product-type.application";
 		};
+		7AF8A0BC2D5943D2005FE77E /* ShareTodo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7AF8A0C92D5943D2005FE77E /* Build configuration list for PBXNativeTarget "ShareTodo" */;
+			buildPhases = (
+				7AF8A0B92D5943D2005FE77E /* Sources */,
+				7AF8A0BA2D5943D2005FE77E /* Frameworks */,
+				7AF8A0BB2D5943D2005FE77E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7AF8A0CE2D5949E0005FE77E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				7AF8A0BE2D5943D2005FE77E /* ShareTodo */,
+			);
+			name = ShareTodo;
+			packageProductDependencies = (
+			);
+			productName = ShareTodo;
+			productReference = 7AF8A0BD2D5943D2005FE77E /* ShareTodo.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -80,7 +457,19 @@
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					7A590B502D590E830023D97A = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					7A590B772D590F2D0023D97A = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					7AC2B18A2D5B565E001BC7FA = {
+						CreatedOnToolsVersion = 16.2;
+					};
 					7ACC69C92D586D2A007FF0FE = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					7AF8A0BC2D5943D2005FE77E = {
 						CreatedOnToolsVersion = 16.2;
 					};
 				};
@@ -100,12 +489,44 @@
 			projectRoot = "";
 			targets = (
 				7ACC69C92D586D2A007FF0FE /* Something New */,
+				7A590B502D590E830023D97A /* TodoWidgetExtension */,
+				7A590B772D590F2D0023D97A /* SharedModels */,
+				7AF8A0BC2D5943D2005FE77E /* ShareTodo */,
+				7AC2B18A2D5B565E001BC7FA /* LockScreenWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		7A590B4F2D590E830023D97A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A590B762D590F2D0023D97A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AC2B1892D5B565E001BC7FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7ACC69C82D586D2A007FF0FE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AF8A0BB2D5943D2005FE77E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -115,7 +536,38 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7A590B4D2D590E830023D97A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AF8A0B12D592CA3005FE77E /* WidgetConfiguration.intentdefinition in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A590B742D590F2D0023D97A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AF8A0AF2D592CA3005FE77E /* WidgetConfiguration.intentdefinition in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AC2B1872D5B565E001BC7FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7ACC69C62D586D2A007FF0FE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AF8A0B02D592CA3005FE77E /* WidgetConfiguration.intentdefinition in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AF8A0B92D5943D2005FE77E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -124,7 +576,233 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		7A590B662D590E860023D97A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A590B502D590E830023D97A /* TodoWidgetExtension */;
+			targetProxy = 7A590B652D590E860023D97A /* PBXContainerItemProxy */;
+		};
+		7A590B7F2D590F2E0023D97A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A590B772D590F2D0023D97A /* SharedModels */;
+			targetProxy = 7A590B7E2D590F2E0023D97A /* PBXContainerItemProxy */;
+		};
+		7A590B8E2D590FC40023D97A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A590B772D590F2D0023D97A /* SharedModels */;
+			targetProxy = 7A590B8D2D590FC40023D97A /* PBXContainerItemProxy */;
+		};
+		7A863D2A2D5CEF13001D9896 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A590B772D590F2D0023D97A /* SharedModels */;
+			targetProxy = 7A863D292D5CEF13001D9896 /* PBXContainerItemProxy */;
+		};
+		7AC2B19B2D5B5660001BC7FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7AC2B18A2D5B565E001BC7FA /* LockScreenWidgetExtension */;
+			targetProxy = 7AC2B19A2D5B5660001BC7FA /* PBXContainerItemProxy */;
+		};
+		7AF8A0C62D5943D2005FE77E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7AF8A0BC2D5943D2005FE77E /* ShareTodo */;
+			targetProxy = 7AF8A0C52D5943D2005FE77E /* PBXContainerItemProxy */;
+		};
+		7AF8A0CE2D5949E0005FE77E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A590B772D590F2D0023D97A /* SharedModels */;
+			targetProxy = 7AF8A0CD2D5949E0005FE77E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		7A590B6A2D590E860023D97A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = TodoWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D6743AUZU3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TodoWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TodoWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.swastik.Something-New.TodoWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7A590B6B2D590E860023D97A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = TodoWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D6743AUZU3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TodoWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TodoWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.swastik.Something-New.TodoWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7A590B842D590F2E0023D97A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = D6743AUZU3;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.swastik.Something-New.SharedModels";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator watchos watchsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,4";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		7A590B852D590F2E0023D97A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = D6743AUZU3;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.swastik.Something-New.SharedModels";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator watchos watchsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,4";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		7AC2B19F2D5B5660001BC7FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = LockScreenWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D6743AUZU3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LockScreenWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Tasks;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.swastik.Something-New";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.swastik.Something-New.LockScreenWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7AC2B1A02D5B5660001BC7FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = LockScreenWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D6743AUZU3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LockScreenWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Tasks;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.swastik.Something-New";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.swastik.Something-New.LockScreenWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		7ACC69D62D586D2C007FF0FE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -249,12 +927,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = "Something New/Something New.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Something New/Preview Content\"";
 				DEVELOPMENT_TEAM = D6743AUZU3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Tasky;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Unlock app";
+				INFOPLIST_KEY_NSSiriUsageDescription = "Allow Siri to add tasks to your list";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -267,9 +952,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.swastik.Something-New";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -278,12 +967,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = "Something New/Something New.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Something New/Preview Content\"";
 				DEVELOPMENT_TEAM = D6743AUZU3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Tasky;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Unlock app";
+				INFOPLIST_KEY_NSSiriUsageDescription = "Allow Siri to add tasks to your list";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -296,6 +992,62 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.swastik.Something-New";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		7AF8A0CA2D5943D2005FE77E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ShareTodo/ShareTodo.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D6743AUZU3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ShareTodo/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ShareTodo;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.swastik.Something-New.ShareTodo";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7AF8A0CB2D5943D2005FE77E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ShareTodo/ShareTodo.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D6743AUZU3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ShareTodo/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ShareTodo;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.swastik.Something-New.ShareTodo";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -305,6 +1057,33 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		7A590B692D590E860023D97A /* Build configuration list for PBXNativeTarget "TodoWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A590B6A2D590E860023D97A /* Debug */,
+				7A590B6B2D590E860023D97A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7A590B832D590F2E0023D97A /* Build configuration list for PBXNativeTarget "SharedModels" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A590B842D590F2E0023D97A /* Debug */,
+				7A590B852D590F2E0023D97A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7AC2B19E2D5B5660001BC7FA /* Build configuration list for PBXNativeTarget "LockScreenWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7AC2B19F2D5B5660001BC7FA /* Debug */,
+				7AC2B1A02D5B5660001BC7FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		7ACC69C52D586D2A007FF0FE /* Build configuration list for PBXProject "Something New" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -319,6 +1098,15 @@
 			buildConfigurations = (
 				7ACC69D92D586D2C007FF0FE /* Debug */,
 				7ACC69DA2D586D2C007FF0FE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7AF8A0C92D5943D2005FE77E /* Build configuration list for PBXNativeTarget "ShareTodo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7AF8A0CA2D5943D2005FE77E /* Debug */,
+				7AF8A0CB2D5943D2005FE77E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

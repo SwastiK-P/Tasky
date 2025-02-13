@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleIcons</key>
+	<dict>
+		<key>CFBundleAlternateIcons</key>
+		<dict>
+			<key>Cyan</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Cyan</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+			<key>Pink</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Pink</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+		</dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>AppIcon</string>
+			</array>
+			<key>UIPrerenderedIcon</key>
+			<false/>
+		</dict>
+	</dict>
+	<key>INIntentsRestrictedWhileLocked</key>
+	<array>
+		<string>AddTaskIntent</string>
+	</array>
+	<key>INIntentsSupported</key>
+	<array>
+		<string>AddTaskIntent</string>
+	</array>
+	<key>IntentsSupported</key>
+	<string>AddTaskIntent</string>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>SelectCategoryIntent</string>
+	</array>
+	<key>NSUserNotificationUsageDescription</key>
+	<string>We need permission to send you reminders for your todos</string>
+</dict>
+</plist>
