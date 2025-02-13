@@ -1,12 +1,31 @@
 import UIKit
 import SwiftUI
+import UserNotifications
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+class SceneDelegate: UIResponder, UIWindowSceneDelegate, UNUserNotificationCenterDelegate {
     var window: UIWindow?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
         QuickActionManager.shared.setupQuickActions()
+        
+        // Set up notification delegate
+        UNUserNotificationCenter.current().delegate = self
+        
+        // Set up notification categories
+        NotificationManager.shared.setupNotificationCategories()
+        
+        // Initialize required dependencies
+        let viewModel = TodoListViewModel()
+        
+        let window = UIWindow(windowScene: windowScene)
+        let contentView = ContentView(
+            viewModel: viewModel,
+            imageViewerData: .constant(nil)  // Pass nil binding since it's handled inside ContentView
+        )
+        window.rootViewController = UIHostingController(rootView: contentView)
+        self.window = window
+        window.makeKeyAndVisible()
     }
     
     func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
@@ -19,6 +38,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             break
         }
         completionHandler(true)
+    }
+    
+    // Add notification delegate method
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        if response.notification.request.content.categoryIdentifier == "dailyReminder" &&
+           (response.actionIdentifier == "addTodo" || response.actionIdentifier == UNNotificationDefaultActionIdentifier) {
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .showNewTaskSheet, object: nil)
+            }
+        }
+        completionHandler()
     }
 }
 

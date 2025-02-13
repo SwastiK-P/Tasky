@@ -74,9 +74,9 @@ final class TodoListViewModel: ObservableObject {
     private func saveTodos() {
         if let encoded = try? JSONEncoder().encode(todos) {
             userDefaults.set(encoded, forKey: "todos")
-            userDefaults.synchronize()  // Force immediate UserDefaults sync
+            userDefaults.synchronize()
             
-            // Force immediate widget updates using multiple methods
+            // Force immediate widget updates
             WidgetCenter.shared.reloadAllTimelines()
             WidgetCenter.shared.getCurrentConfigurations { result in
                 switch result {
@@ -87,12 +87,6 @@ final class TodoListViewModel: ObservableObject {
                 case .failure:
                     break
                 }
-            }
-            
-            // Invalidate widget cache
-            if let bundleId = Bundle.main.bundleIdentifier {
-                UserDefaults.standard.removeObject(forKey: "\(bundleId).widget-cache")
-                UserDefaults.standard.synchronize()
             }
         }
     }

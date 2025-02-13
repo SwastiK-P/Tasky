@@ -10,6 +10,7 @@ import Social
 import SharedModels
 import WidgetKit
 import UniformTypeIdentifiers
+import SwiftUI
 
 class ShareViewController: UIViewController {
     private var selectedCategory: SharedModels.Category = .personal
@@ -191,5 +192,13 @@ class ShareViewController: UIViewController {
         }
         
         extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+    }
+    
+    private func categoryColor(for category: SharedModels.Category) -> Color {
+        switch category {
+        case .personal: return .purple
+        case .work: return .green
+        case .college: return .orange
+        }
     }
 }

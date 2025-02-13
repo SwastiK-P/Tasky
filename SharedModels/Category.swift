@@ -16,9 +16,9 @@ public enum Category: String, Codable, CaseIterable {
     
     public var color: Color {
         switch self {
-        case .personal: return .blue
-        case .work: return .orange
-        case .college: return .green
+        case .personal: return .purple
+        case .work: return .green
+        case .college: return .orange
         }
     }
 } 

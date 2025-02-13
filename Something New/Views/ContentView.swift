@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var viewModel: TodoListViewModel
+    @EnvironmentObject private var themeManager: ThemeManager
     @State private var showingAddTodo = false
     @State private var showingSettings = false
     @State private var selectedTab = 0
@@ -11,6 +12,7 @@ struct ContentView: View {
     @State private var accentColor: Color = .black
     @StateObject private var authManager = AuthenticationManager.shared
     @Environment(\.scenePhase) private var scenePhase
+    @StateObject private var licenseManager = LicenseManager.shared
     
     init(viewModel: TodoListViewModel, imageViewerData: Binding<ImageViewerData?>) {
         self._viewModel = ObservedObject(wrappedValue: viewModel)
@@ -18,41 +20,52 @@ struct ContentView: View {
     }
     
     var body: some View {
-        ZStack {
-            Color(.systemGroupedBackground)
-                .ignoresSafeArea()
-            
-            TabView(selection: $selectedTab) {
-                dashboardTab
-                todoListTab
-            }
-            .toolbarBackground(.thinMaterial, for: .tabBar)
-            .tint(accentColor)
-            .sheet(isPresented: $showingAddTodo) {
-                AddTodoView(viewModel: viewModel)
-            }
-            .sheet(isPresented: $showingSettings) {
-                SettingsView()
-            }
-            .onAppear {
-                updateAccentColor()
-            }
-            .onReceive(NotificationCenter.default.publisher(for: Notification.Name("AppStyleChanged"))) { notification in
-                if let style = notification.userInfo?["style"] as? String {
-                    withAnimation {
-                        accentColor = getAccentColor(for: style)
+        Group {
+            if licenseManager.isChecking {
+                Color.clear
+            } else if !licenseManager.isLicensed {
+                LicenseView()
+            } else {
+                ZStack {
+                    Color(.systemGroupedBackground)
+                        .ignoresSafeArea()
+                    
+                    TabView(selection: $selectedTab) {
+                        dashboardTab
+                        todoListTab
+                    }
+                    .toolbarBackground(.thinMaterial, for: .tabBar)
+                    .tint(themeManager.currentColor)
+                    .sheet(isPresented: $showingAddTodo) {
+                        AddTodoView(viewModel: viewModel)
+                    }
+                    .sheet(isPresented: $showingSettings) {
+                        SettingsView()
+                    }
+                    .onAppear {
+                        updateAccentColor()
+                    }
+                    .onReceive(NotificationCenter.default.publisher(for: Notification.Name("AppStyleChanged"))) { notification in
+                        if let style = notification.userInfo?["style"] as? String {
+                            withAnimation {
+                                accentColor = getAccentColor(for: style)
+                            }
+                        }
+                    }
+                    .onReceive(NotificationCenter.default.publisher(for: .showNewTaskSheet)) { _ in
+                        showingAddTodo = true
+                    }
+                    
+                    if authManager.isAppLocked && !authManager.isAuthenticated {
+                        LockView()
+                            .transition(.opacity)
                     }
                 }
+                .animation(.default, value: authManager.isAuthenticated)
+                .onChange(of: scenePhase) { phase in
+                    authManager.handleScenePhase(phase)
+                }
             }
-            
-            if authManager.isAppLocked && !authManager.isAuthenticated {
-                LockView()
-                    .transition(.opacity)
-            }
-        }
-        .animation(.default, value: authManager.isAuthenticated)
-        .onChange(of: scenePhase) { phase in
-            authManager.handleScenePhase(phase)
         }
     }
     
@@ -91,7 +104,7 @@ struct ContentView: View {
             showingSettings = true
         } label: {
             Image(systemName: "gear")
-                .foregroundColor(Color(.label))
+                .foregroundColor(themeManager.currentColor)
         }
     }
     

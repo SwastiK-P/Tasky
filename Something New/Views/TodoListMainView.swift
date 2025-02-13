@@ -9,9 +9,8 @@ struct TodoListMainView: View {
     var body: some View {
         Group {
             if viewModel.todos.isEmpty {
-                EmptyStateView(
-                    icon: "checkmark.circle",
-                    title: "No Tasks Yet",
+                EmptyStateView1(
+                    icon: "checkmark.circle", title: "No Tasks Yet",
                     message: "Add your first task by tapping the + button"
                 )
             } else {
@@ -20,7 +19,7 @@ struct TodoListMainView: View {
         }
         .navigationTitle("Todo List")
         .navigationBarItems(trailing: addButton)
-        .toolbarBackground(.hidden, for: .navigationBar)
+        .toolbarBackground(.automatic, for: .navigationBar)
     }
     
     private var addButton: some View {

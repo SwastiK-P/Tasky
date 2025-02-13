@@ -22,28 +22,38 @@ struct CategoryView: View {
     }
     
     var body: some View {
-        List {
-            ForEach(filteredTodos) { todo in
-                TodoRowView(
-                    todo: todo,
-                    toggleAction: { viewModel.toggleTodo(todo) },
-                    viewModel: viewModel,
-                    imageViewerData: $imageViewerData
+        Group {
+            if filteredTodos.isEmpty {
+                EmptyStateView1 (
+                    icon: "checkmark.circle", title: "No Tasks Yet",
+                    message: "Add task in \(category.rawValue) by tapping the + button"
                 )
-                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                    Button(role: .destructive) {
-                        viewModel.deleteTodo(todo)
-                    } label: {
-                        Label("Delete", systemImage: "trash")
-                            .tint(.red)
+            } else {
+                if !filteredTodos.isEmpty {
+                    List {
+                        ForEach(filteredTodos) { todo in
+                            TodoRowView(
+                                todo: todo,
+                                toggleAction: { viewModel.toggleTodo(todo) },
+                                viewModel: viewModel,
+                                imageViewerData: $imageViewerData
+                            )
+                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                Button(role: .destructive) {
+                                    viewModel.deleteTodo(todo)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                        .tint(.red)
+                                }
+                            }
+                            .listRowBackground(Color.clear)
+                        }
                     }
                 }
-                .listRowBackground(Color.clear)
             }
         }
         .navigationTitle(category.rawValue)
         .navigationBarItems(trailing: addButton)
-        .tint(.black) // Override the theme color at list level
         .sheet(isPresented: $showingAddSheet) {
             AddTodoView(viewModel: viewModel, preselectedCategory: category)
         }

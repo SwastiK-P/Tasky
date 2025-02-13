@@ -24,6 +24,16 @@ struct AddTodoView: View {
     @State private var priority: TodoItem.Priority
     @State private var category: Category
     
+    // Add state for notification status
+    @State private var notificationStatus: UNAuthorizationStatus = .authorized
+    
+    // Add state for alert
+    @State private var showingNotificationAlert = false
+    
+    // Add state for continuous mode
+    @State private var isContinuousMode = false
+    @State private var showingMenu = false
+    
     let preselectedCategory: Category?
     
     enum ReminderTime: String, CaseIterable {
@@ -77,6 +87,24 @@ struct AddTodoView: View {
                             DatePicker("Time", selection: $dueTime, displayedComponents: .hourAndMinute)
                             
                             Toggle("Enable Reminder", isOn: $enableReminder)
+                                .disabled(notificationStatus == .denied)
+                                .onChange(of: enableReminder) { newValue in
+                                    if newValue {
+                                        NotificationManager.shared.checkNotificationStatus { status in
+                                            if status == .denied {
+                                                enableReminder = false
+                                                showingNotificationAlert = true
+                                            } else if status == .notDetermined {
+                                                NotificationManager.shared.requestNotificationPermission { granted in
+                                                    if !granted {
+                                                        enableReminder = false
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            
                             if enableReminder {
                                 Picker("Remind me", selection: $reminderTime) {
                                     ForEach(ReminderTime.allCases, id: \.self) { time in
@@ -85,6 +113,11 @@ struct AddTodoView: View {
                                 }
                             }
                         }
+                    }
+                } footer: {
+                    if showDueTime && notificationStatus == .denied {
+                        Text("Notifications are disabled. Enable them in Settings to set reminders.")
+                            .foregroundStyle(.orange)
                     }
                 }
                 
@@ -160,48 +193,77 @@ struct AddTodoView: View {
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Add") {
-                        handleAddTodo()
-                    }
-                    .disabled(title.isEmpty)
+                    addButton
                 }
             }
+            .notificationAlert(isPresented: $showingNotificationAlert)
         }
         .onAppear {
-            requestNotificationPermission()
+            NotificationManager.shared.checkNotificationStatus { status in
+                notificationStatus = status
+                if status == .denied {
+                    enableReminder = false
+                }
+            }
             SoundManager.playSound("Open")  // Play sound when sheet opens
         }
     }
     
-    private func requestNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
-            // Handle the permission result if needed
-        }
-    }
-    
-    private func handleAddTodo() {
-        let finalDueDate = calculateFinalDueDate()
-        
-        let notificationId = UUID().uuidString
-        let todo = TodoItem(
-            id: UUID(),
+    private func addTodo(continuous: Bool = false) {
+        let newTodo = TodoItem(
             title: title,
-            isCompleted: false,
-            dueDate: finalDueDate,
+            dueDate: showDueDate ? dueDate : nil,
             dueTime: showDueTime ? dueTime : nil,
             category: category,
             notes: notes.isEmpty ? nil : notes,
             priority: priority,
             images: saveImages(),
-            notificationId: enableReminder ? notificationId : nil
+            notificationId: enableReminder ? UUID().uuidString : nil
         )
         
-        if enableReminder, let dueDate = finalDueDate {
-            scheduleNotification(for: todo, at: dueDate, with: notificationId)
+        if enableReminder, let dueDate = newTodo.dueDate {
+            scheduleNotification(for: newTodo, at: dueDate, with: newTodo.notificationId!)
         }
         
-        viewModel.addTodo(todo)  // Removed sound from here
-        dismiss()
+        viewModel.addTodo(newTodo)
+        FeedbackManager.shared.playHaptic(style: .medium)
+        
+        if continuous {
+            // Reset fields to default values
+            title = ""
+            notes = ""
+            imageManager.selectedImages = []
+            if let defaultCategory = Category(rawValue: UserDefaults.standard.string(forKey: "defaultCategory") ?? Category.personal.rawValue) {
+                category = defaultCategory
+            }
+            if let defaultPriority = TodoItem.Priority(rawValue: UserDefaults.standard.string(forKey: "defaultPriority") ?? TodoItem.Priority.medium.rawValue) {
+                priority = defaultPriority
+            }
+        } else {
+            dismiss()
+        }
+    }
+    
+    var addButton: some View {
+        Button {
+            addTodo()
+        } label: {
+            Text("Add")
+        }
+        .disabled(title.isEmpty)
+        .contextMenu {
+            Button {
+                addTodo()
+            } label: {
+                Label("Add Todo", systemImage: "plus.circle")
+            }
+            
+            Button {
+                addTodo(continuous: true)
+            } label: {
+                Label("Continuous Add", systemImage: "arrow.counterclockwise")
+            }
+        }
     }
     
     private func scheduleNotification(for todo: TodoItem, at date: Date, with id: String) {

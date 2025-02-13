@@ -1,4 +1,5 @@
 import SwiftUI
+import UserNotifications
 
 struct SettingsView: View {
     @EnvironmentObject private var themeManager: ThemeManager
@@ -9,6 +10,10 @@ struct SettingsView: View {
     @AppStorage("defaultPriority") private var defaultPriority = TodoItem.Priority.medium.rawValue
     @StateObject private var authManager = AuthenticationManager.shared
     @State private var heartTapped = false
+    @AppStorage("dailyReminderEnabled") private var isDailyReminderEnabled = false
+    @AppStorage("dailyReminderTime") private var dailyReminderTime = Calendar.current.date(from: DateComponents(hour: 20, minute: 0)) ?? Date()
+    @State private var notificationStatus: UNAuthorizationStatus = .notDetermined
+    @StateObject var licenseManager = LicenseManager.shared
     
     private let themes = [
         AppTheme(name: "Default", color: .black, darkModeColor: .white, iconName: "AppIcon-Preview"),
@@ -23,6 +28,7 @@ struct SettingsView: View {
             List {
                 feedbackSection
                 defaultsSection
+                notificationsSection
                 themeSection
                 aboutSection
                 securitySection
@@ -33,8 +39,14 @@ struct SettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") { dismiss() }
+                    Button("Done") {
+                        FeedbackManager.shared.playHaptic(style: .medium)
+                        dismiss()
+                    }
                 }
+            }
+            .onAppear {
+                checkNotificationStatus()
             }
         }
         .tint(themeManager.currentColor)
@@ -144,6 +156,63 @@ struct SettingsView: View {
                         feedbackManager.previewCompletionSound(newValue)
                     }
                 }
+            }
+        }
+    }
+    
+    private var notificationsSection: some View {
+        Section {
+            HStack {
+                SettingToggleRow(
+                    title: "Daily Reminder",
+                    icon: "app.badge",
+                    isOn: .init(
+                        get: { isDailyReminderEnabled && notificationStatus != .denied },
+                        set: { newValue in
+                            if newValue {
+                                if notificationStatus == .denied {
+                                    showNotificationDeniedAlert()
+                                } else if notificationStatus == .notDetermined {
+                                    requestNotificationPermission()
+                                } else {
+                                    isDailyReminderEnabled = true
+                                    scheduleDailyReminder()
+                                }
+                            } else {
+                                isDailyReminderEnabled = false
+                                cancelDailyReminder()
+                            }
+                        }
+                    )
+                )
+                
+                if notificationStatus == .denied {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundStyle(.orange)
+                        .font(.footnote)
+                }
+            }
+            
+            if isDailyReminderEnabled {
+                HStack {
+                    Image(systemName: "clock")
+                        .frame(width: 25)
+                    DatePicker(
+                        "Reminder Time",
+                        selection: $dailyReminderTime,
+                        displayedComponents: .hourAndMinute
+                    )
+                    .onChange(of: dailyReminderTime) { _ in
+                        scheduleDailyReminder()
+                    }
+                }
+            }
+        } header: {
+            Text("Notifications")
+        } footer: {
+            if notificationStatus == .denied {
+                Text("Notifications are currently disabled. Enable them in Settings to receive reminders.")
+                    .foregroundStyle(.orange)
             }
         }
     }
@@ -271,6 +340,60 @@ struct SettingsView: View {
     
     private func updateHapticsSetting(isEnabled: Bool) {
         userDefaults.set(isEnabled, forKey: "hapticsEnabled")
+    }
+    
+    private func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, _ in
+            DispatchQueue.main.async {
+                if granted {
+                    self.notificationStatus = .authorized
+                    self.isDailyReminderEnabled = true
+                    scheduleDailyReminder()
+                } else {
+                    self.notificationStatus = .denied
+                    self.isDailyReminderEnabled = false
+                }
+                feedbackManager.playHaptic(style: .rigid)
+            }
+        }
+    }
+    
+    private func scheduleDailyReminder() {
+        NotificationManager.shared.scheduleDailyReminder(at: dailyReminderTime)
+    }
+    
+    private func cancelDailyReminder() {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["dailyReminder"])
+        feedbackManager.playHaptic(style: .rigid)
+    }
+    
+    private func checkNotificationStatus() {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            DispatchQueue.main.async {
+                self.notificationStatus = settings.authorizationStatus
+                if settings.authorizationStatus == .denied {
+                    self.isDailyReminderEnabled = false
+                    self.cancelDailyReminder()
+                }
+            }
+        }
+    }
+    
+    private func showNotificationDeniedAlert() {
+        let alert = UIAlertController(
+            title: "Notifications Disabled",
+            message: "To enable notifications, go to Settings > Notifications > Tasky and turn on notifications.",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Open Settings", style: .default) { _ in
+            if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(settingsURL)
+            }
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true)
     }
 }
 

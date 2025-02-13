@@ -359,6 +359,8 @@ struct LargeWidgetView: View {
         case .personal: return .purple
         case .work: return .green
         case .college: return .orange
+        @unknown default:
+            return .black
         }
     }
 }

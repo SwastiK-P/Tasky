@@ -17,6 +17,10 @@ struct EditTodoView: View {
     @State private var category: Category
     @State private var selectedImages: [UIImage] = []
     @State private var existingImages: [String] = []
+    @State private var notificationStatus: UNAuthorizationStatus = .authorized
+    @State private var showingNotificationAlert = false
+    
+    @EnvironmentObject private var themeManager: ThemeManager
     
     let todo: TodoItem
     
@@ -56,6 +60,24 @@ struct EditTodoView: View {
                             DatePicker("Time", selection: $dueTime, displayedComponents: .hourAndMinute)
                             
                             Toggle("Enable Reminder", isOn: $enableReminder)
+                                .disabled(notificationStatus == .denied)
+                                .onChange(of: enableReminder) { newValue in
+                                    if newValue {
+                                        NotificationManager.shared.checkNotificationStatus { status in
+                                            if status == .denied {
+                                                enableReminder = false
+                                                showingNotificationAlert = true
+                                            } else if status == .notDetermined {
+                                                NotificationManager.shared.requestNotificationPermission { granted in
+                                                    if !granted {
+                                                        enableReminder = false
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            
                             if enableReminder {
                                 Picker("Remind me", selection: $reminderTime) {
                                     ForEach(AddTodoView.ReminderTime.allCases, id: \.self) { time in
@@ -65,13 +87,23 @@ struct EditTodoView: View {
                             }
                         }
                     }
+                } footer: {
+                    if showDueTime && notificationStatus == .denied {
+                        Text("Notifications are disabled. Enable them in Settings to set reminders.")
+                            .foregroundStyle(.orange)
+                    }
                 }
                 
                 Section {
                     Picker("Priority", selection: $priority) {
                         ForEach(TodoItem.Priority.allCases, id: \.self) { priority in
                             Text(priority.rawValue.capitalized)
+                                .tag(priority)
                         }
+                    }
+                    .frame(height: 36)
+                    .onChange(of: priority) { _ in
+                        FeedbackManager.shared.playHaptic(style: .light)
                     }
                 }
                 
@@ -81,6 +113,10 @@ struct EditTodoView: View {
                             Text(category.rawValue)
                                 .tag(category)
                         }
+                    }
+                    .frame(height: 36)
+                    .onChange(of: category) { _ in
+                        FeedbackManager.shared.playHaptic(style: .light)
                     }
                 }
                 
@@ -147,6 +183,7 @@ struct EditTodoView: View {
                     }
                 }
             }
+            .tint(themeManager.currentColor)
             .navigationTitle("Edit Todo")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.visible, for: .navigationBar)
@@ -165,8 +202,14 @@ struct EditTodoView: View {
             }
         }
         .onAppear {
-            requestNotificationPermission()
+            NotificationManager.shared.checkNotificationStatus { status in
+                notificationStatus = status
+                if status == .denied {
+                    enableReminder = false
+                }
+            }
         }
+        .notificationAlert(isPresented: $showingNotificationAlert)
     }
     
     private func loadImage(named: String) -> UIImage? {
@@ -199,12 +242,6 @@ struct EditTodoView: View {
         if let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let imagePath = documentsPath.appendingPathComponent(named)
             try? FileManager.default.removeItem(at: imagePath)
-        }
-    }
-    
-    private func requestNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
-            // Handle permission result
         }
     }
     
