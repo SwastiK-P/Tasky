@@ -14,25 +14,16 @@ final class TodoListViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     @StateObject private var feedbackManager = FeedbackManager.shared
     
+    
     init() {
         loadData()
         setupSubscriptions()
-        setupNotifications()
     }
     
     private func setupSubscriptions() {
         $todos
             .sink { [weak self] _ in
                 self?.saveTodos()
-            }
-            .store(in: &cancellables)
-    }
-    
-    private func setupNotifications() {
-        // Observe when app becomes active
-        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
-            .sink { [weak self] _ in
-                self?.loadData()
             }
             .store(in: &cancellables)
     }
@@ -49,14 +40,14 @@ final class TodoListViewModel: ObservableObject {
             updatedTodo.completedDate = updatedTodo.isCompleted ? Date() : nil
             todos[index] = updatedTodo
             
-            // If todo is completed and has a notification, remove it
-            if todos[index].isCompleted, let notificationId = todos[index].notificationId {
-                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [notificationId])
-            }
-            
-            if todos[index].isCompleted {
+            if updatedTodo.isCompleted {
+                // Only play sound and remove notification when marking as complete
+                if let notificationId = updatedTodo.notificationId {
+                    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [notificationId])
+                }
                 FeedbackManager.shared.playDoneSound()
             }
+            
             saveTodos()
         }
     }
@@ -74,18 +65,43 @@ final class TodoListViewModel: ObservableObject {
         }
     }
     
+    func removeWorkSession(_ sessionId: UUID, from todo: TodoItem) {
+        if let index = todos.firstIndex(where: { $0.id == todo.id }) {
+            var updatedTodo = todo
+            updatedTodo.workSessions?.removeAll { $0.id == sessionId }
+            todos[index] = updatedTodo
+            saveTodos()
+            HapticManager.shared.impact(style: .medium)
+        }
+    }
+    
     private func saveTodos() {
-        if let encoded = try? JSONEncoder().encode(todos) {
+        do {
+            let encoded = try JSONEncoder().encode(todos)
             userDefaults.set(encoded, forKey: "todos")
             userDefaults.synchronize()
+            
+            // Force immediate widget updates
             WidgetCenter.shared.reloadAllTimelines()
+            WidgetCenter.shared.getCurrentConfigurations { result in
+                switch result {
+                case .success(let widgets):
+                    widgets.forEach { widget in
+                        WidgetCenter.shared.reloadTimelines(ofKind: widget.kind)
+                    }
+                case .failure(let error):
+                    print("Failed to reload widget timelines: \(error)")
+                }
+            }
+            print("Saved \(todos.count) todos to UserDefaults and reloaded widgets")
+        } catch {
+            print("Failed to encode todos: \(error)")
         }
     }
     
     private func loadData() {
         if let todosData = userDefaults.data(forKey: "todos"),
            let decodedTodos = try? JSONDecoder().decode([TodoItem].self, from: todosData) {
-            // Update on main thread immediately
             todos = decodedTodos
         }
     }

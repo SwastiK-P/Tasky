@@ -41,7 +41,7 @@ struct Provider: TimelineProvider {
             do {
                 let todos = try JSONDecoder().decode([TodoItem].self, from: todosData)
                 let incompleteTodos = todos.filter { !$0.isCompleted }
-                return Array(incompleteTodos.prefix(2)) // Just show first 2 incomplete tasks
+                return Array(incompleteTodos) // Just show first 2 incomplete tasks
             } catch {
                 print("Widget: Failed to decode todos: \(error)")
             }

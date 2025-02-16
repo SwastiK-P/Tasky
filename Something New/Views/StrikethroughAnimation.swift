@@ -19,6 +19,11 @@ struct StrikethroughAnimation: ViewModifier {
                             .frame(width: width, height: 1.5)
                             .offset(y: geo.size.height * 0.5)
                             .onAppear {
+                                // Only prepare haptics if we're marking complete
+                                if !isActive {
+                                    return
+                                }
+                                
                                 // Prepare haptics
                                 softHaptic.prepare()
                                 mediumHaptic.prepare()

@@ -241,7 +241,7 @@ struct SettingsView: View {
                     .frame(width: 25)
                 Text("Version")
                 Spacer()
-                Text(Bundle.main.appVersion)
+                Text("\(Bundle.main.appVersion) Alpha")
                     .foregroundStyle(.secondary)
             }
             

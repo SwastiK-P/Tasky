@@ -1,8 +1,11 @@
 import SwiftUI
 import WidgetKit
 import AppIntents
+import UIKit
 
+@main
 struct SomethingNewApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var viewModel = TodoListViewModel()
     @StateObject private var themeManager = ThemeManager()
     @StateObject private var authManager = AuthenticationManager.shared
@@ -27,9 +30,36 @@ struct SomethingNewApp: App {
                 ImageViewer(image: data.image)
                     .environmentObject(themeManager)
             }
+            .onOpenURL { url in
+                // Handle deep links if needed
+            }
+            .onContinueUserActivity("") { _ in
+                // Handle user activities if needed
+            }
         }
     }
 }
+
+// Add this to your Info.plist:
+// <key>UIApplicationShortcutItems</key>
+// <array>
+//     <dict>
+//         <key>UIApplicationShortcutItemType</key>
+//         <string>AddTaskAction</string>
+//         <key>UIApplicationShortcutItemTitle</key>
+//         <string>Add Task</string>
+//         <key>UIApplicationShortcutItemIconSymbolName</key>
+//         <string>plus.circle.fill</string>
+//     </dict>
+//     <dict>
+//         <key>UIApplicationShortcutItemType</key>
+//         <string>AddPriorityTaskAction</string>
+//         <key>UIApplicationShortcutItemTitle</key>
+//         <string>Add Priority Task</string>
+//         <key>UIApplicationShortcutItemIconSymbolName</key>
+//         <string>exclamationmark.circle.fill</string>
+//     </dict>
+// </array>
 
 struct WidgetConfigView: View {
     @Environment(\.dismiss) private var dismiss

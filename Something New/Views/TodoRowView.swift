@@ -2,9 +2,11 @@ import SwiftUI
 
 struct TodoRowView: View {
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.scenePhase) private var scenePhase
     let todo: TodoItem
     let toggleAction: () -> Void
     @ObservedObject var viewModel: TodoListViewModel
+    @StateObject private var workSessionViewModel = WorkSessionViewModel()
     @State private var showingEditSheet = false
     @State private var shouldStrike = false
     @State private var isAnimatingStrike = false
@@ -21,111 +23,209 @@ struct TodoRowView: View {
     @State private var detectedURL: URL?
     @State private var isStrikingThrough = false
     @State private var shouldAnimate = false
+    @State private var showingWorkSession = false
+    @State private var showingDetails = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack(alignment: .top, spacing: 12) {
-                Button(action: {
-                    handleTodoCompletion()
-                }) {
-                    Image(systemName: todo.isCompleted ? "checkmark.circle.fill" : "circle")
-                        .foregroundColor(.gray)
+        mainContent
+            .onChange(of: workSessionViewModel.isActive) { isActive in
+                if isActive {
+                    showingWorkSession = true
                 }
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(todo.title)
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .foregroundColor(todo.isCompleted ? .secondary : .primary)
-                        .animatedStrikethrough(isActive: shouldAnimate)
-                    
-                    if let url = detectedURL {
-                        Button(action: {
-                            UIApplication.shared.open(url)
-                        }) {
-                            CompactLinkPreviewView(url: url)
-                        }
-                    } else if let note = todo.notes {
-                        Text(note)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    
-                    if let images = todo.images, !images.isEmpty {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 4) {
-                                ForEach(Array(images.prefix(5).enumerated()), id: \.element) { index, imageName in
-                                    if let image = loadImage(named: imageName) {
-                                        Button(action: {
-                                            selectedImageIndex = index
-                                            if let frame = selectedImageFrame {
-                                                withAnimation {
-                                                    imageViewerData = ImageViewerData(image: image, frame: frame)
-                                                }
-                                            }
-                                        }) {
-                                            Image(uiImage: image)
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fill)
-                                                .frame(width: 30, height: 30)
-                                                .clipShape(RoundedRectangle(cornerRadius: 4))
-                                        }
-                                        .buttonStyle(PlainButtonStyle())
-                                        .background(
-                                            GeometryReader { geo in
-                                                Color.clear
-                                                    .preference(key: ImageFramePreferenceKey.self,
-                                                              value: [index: geo.frame(in: .global)])
-                                            }
-                                        )
-                                    }
-                                }
-                            }
-                            .padding(.vertical, 4)
-                        }
-                    }
-                    
-                    HStack(spacing: 8) {
-                        Text(todo.category.rawValue)
-                            .font(.caption)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(todo.category.color.opacity(0.2))
-                            .foregroundColor(todo.category.color)
-                            .cornerRadius(8)
-                        
-                        if let dueDate = todo.dueDate {
-                            Text(dueDate, style: .date)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .background(Color(.gray).opacity(0.2))
-                                .cornerRadius(8)
-                        }
-                        
-                        if todo.priority == .high {
-                            Text("Priority")
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .font(.caption)
-                                .foregroundStyle(.red)
-                                .background(Color(.red).opacity(0.2))
-                                .cornerRadius(8)
-                        }
+            }
+            .onChange(of: workSessionViewModel.isPaused) { isPaused in
+                if isPaused {
+                    showingWorkSession = true
+                }
+            }
+    }
+    
+    private var mainContent: some View {
+        Button {
+            showingDetails = true
+        } label: {
+            HStack(alignment: .top, spacing: 12) {
+                checkmarkButton
+                contentStack
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
+        .contentShape(Rectangle())
+        .onTapGesture {
+            showingDetails = true
+        }
+        .padding(.vertical, 4)
+        .listRowBackground(rowBackground)
+        .contextMenu { contextMenuContent }
+        .sheet(isPresented: $showingEditSheet) {
+            EditTodoView(todo: todo, viewModel: viewModel)
+        }
+        .fullScreenCover(isPresented: $showingWorkSession) {
+            WorkSessionView(workSessionViewModel: workSessionViewModel, todoViewModel: viewModel, todo: todo)
+        }
+        .sheet(isPresented: $showingDetails) {
+            TodoDetailsView(todo: todo, viewModel: viewModel)
+                .presentationDetents([.medium, .large])
+        }
+        .onAppear {
+            shouldAnimate = false
+            detectURLInNotes()
+            if workSessionViewModel.isActive || workSessionViewModel.isPaused {
+                showingWorkSession = true
+            }
+        }
+        .onChange(of: todo.notes) { _ in
+            detectURLInNotes()
+        }
+        .onPreferenceChange(ImageFramePreferenceKey.self) { frames in
+            selectedImageFrame = frames[selectedImageIndex]
+        }
+        .onLongPressGesture(minimumDuration: 0.5) {
+            if !todo.isCompleted {
+                HapticManager.shared.impact(style: .medium)
+                showingWorkSession = true
+            }
+        }
+    }
+    
+    private var checkmarkButton: some View {
+        Button(action: {
+            handleTodoCompletion()
+        }) {
+            Image(systemName: todo.isCompleted ? "checkmark.circle.fill" : "circle")
+                .foregroundColor(.gray)
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+    
+    private var contentStack: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(todo.title)
+                .font(.title3)
+                .fontWeight(.semibold)
+                .foregroundColor(todo.isCompleted ? .secondary : .primary)
+                .animatedStrikethrough(isActive: shouldAnimate)
+            
+            if let url = detectedURL {
+                urlPreview(url)
+            } else if let note = todo.notes {
+                Text(note)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            
+            if let images = todo.images, !images.isEmpty {
+                imageScrollView(images)
+            }
+            
+            tagsRow
+        }
+    }
+    
+    private var tagsRow: some View {
+        HStack(spacing: 8) {
+            categoryTag
+            if let dueDate = todo.dueDate {
+                dueDateTag(dueDate)
+            }
+            if todo.priority == .high {
+                priorityTag
+            }
+        }
+    }
+    
+    private var categoryTag: some View {
+        Text(todo.category.rawValue)
+            .font(.caption)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(todo.category.color.opacity(0.2))
+            .foregroundColor(todo.category.color)
+            .cornerRadius(8)
+    }
+    
+    private func dueDateTag(_ date: Date) -> some View {
+        Text(date, style: .date)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .font(.caption)
+            .foregroundStyle(.secondary)
+            .background(Color(.gray).opacity(0.2))
+            .cornerRadius(8)
+    }
+    
+    private var priorityTag: some View {
+        Text("Priority")
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .font(.caption)
+            .foregroundStyle(.red)
+            .background(Color(.red).opacity(0.2))
+            .cornerRadius(8)
+    }
+    
+    private func urlPreview(_ url: URL) -> some View {
+        Button(action: {
+            UIApplication.shared.open(url)
+        }) {
+            CompactLinkPreviewView(url: url)
+        }
+    }
+    
+    private func imageScrollView(_ images: [String]) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 4) {
+                ForEach(Array(images.prefix(5).enumerated()), id: \.element) { index, imageName in
+                    if let image = loadImage(named: imageName) {
+                        imageButton(image: image, index: index)
                     }
                 }
             }
+            .padding(.vertical, 4)
         }
-        .padding(.vertical, 4)
-        .listRowBackground(
-            todo.category.color.opacity(colorScheme == .dark ? 0.25 : 0.10)
+    }
+    
+    private func imageButton(image: UIImage, index: Int) -> some View {
+        Button(action: {
+            selectedImageIndex = index
+            if let frame = selectedImageFrame {
+                withAnimation {
+                    imageViewerData = ImageViewerData(image: image, frame: frame)
+                }
+            }
+        }) {
+            Image(uiImage: image)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 30, height: 30)
+                .clipShape(RoundedRectangle(cornerRadius: 4))
+        }
+        .buttonStyle(PlainButtonStyle())
+        .background(
+            GeometryReader { geo in
+                Color.clear
+                    .preference(key: ImageFramePreferenceKey.self,
+                              value: [index: geo.frame(in: .global)])
+            }
         )
-        .contextMenu {
+    }
+    
+    private var rowBackground: some View {
+        todo.category.color.opacity(colorScheme == .dark ? 0.25 : 0.10)
+    }
+    
+    private var contextMenuContent: some View {
+        Group {
             Button {
                 showingEditSheet = true
             } label: {
                 Label("Edit", systemImage: "pencil")
+            }
+            
+            Button {
+                showingDetails = true
+            } label: {
+                Label("Show Details", systemImage: "doc.richtext")
             }
             
             Button {
@@ -143,40 +243,36 @@ struct TodoRowView: View {
                 }
             }
             
+            if !todo.isCompleted {
+                Button {
+                    showingWorkSession = true
+                } label: {
+                    Label("Start Working", systemImage: "timer")
+                }
+            }
+            
             Button(role: .destructive) {
                 viewModel.deleteTodo(todo)
             } label: {
                 Label("Delete", systemImage: "trash")
             }
         }
-        .sheet(isPresented: $showingEditSheet) {
-            EditTodoView(todo: todo, viewModel: viewModel)
+    }
+    
+    private func handleTodoCompletion() {
+        guard !isStrikingThrough else { return }
+        guard !todo.isCompleted else {
+            toggleAction()
+            return
         }
-        .onAppear {
+        
+        isStrikingThrough = true
+        shouldAnimate = true
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+            toggleAction()
+            isStrikingThrough = false
             shouldAnimate = false
-            detectURLInNotes()
-        }
-        .onChange(of: todo.notes) { _ in
-            detectURLInNotes()
-        }
-        .onPreferenceChange(ImageFramePreferenceKey.self) { frames in
-            selectedImageFrame = frames[selectedImageIndex]
-        }
-        .overlay {
-            if expandedImage != nil {
-                Color.black
-                    .opacity(isImageExpanded ? 0.9 : 0)
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
-                            isImageExpanded = false
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            expandedImage = nil
-                        }
-                    }
-                    .zIndex(0)
-            }
         }
     }
     
@@ -194,39 +290,15 @@ struct TodoRowView: View {
             return
         }
         
-        if let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) {
-            let range = NSRange(location: 0, length: notes.utf16.count)
-            let matches = detector.matches(in: notes, options: [], range: range)
-            
-            if let firstMatch = matches.first,
-               let matchURL = firstMatch.url {
-                detectedURL = matchURL
-            } else {
-                // Fallback for plain URLs
-                if let url = URL(string: notes),
-                   UIApplication.shared.canOpenURL(url) {
-                    detectedURL = url
-                } else {
-                    detectedURL = nil
-                }
-            }
-        }
-    }
-    
-    private func handleTodoCompletion() {
-        guard !isStrikingThrough else { return }
-        guard !todo.isCompleted else {
-            toggleAction()
-            return
-        }
+        let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+        let matches = detector?.matches(in: notes, options: [], range: NSRange(location: 0, length: notes.utf16.count))
         
-        isStrikingThrough = true
-        shouldAnimate = true
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-            toggleAction()
-            isStrikingThrough = false
-            shouldAnimate = false
+        if let firstMatch = matches?.first,
+           let range = Range(firstMatch.range, in: notes),
+           let url = URL(string: String(notes[range])) {
+            detectedURL = url
+        } else {
+            detectedURL = nil
         }
     }
 }

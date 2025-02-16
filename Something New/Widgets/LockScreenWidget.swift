@@ -10,22 +10,40 @@ struct LockScreenProvider: TimelineProvider {
     }
     
     func getSnapshot(in context: Context, completion: @escaping (LockScreenEntry) -> ()) {
-        let entry = LockScreenEntry(date: Date(), todos: loadTodos())
+        let todos = loadTodos()
+        print("Widget snapshot: Found \(todos.count) todos")
+        let entry = LockScreenEntry(date: Date(), todos: todos)
         completion(entry)
     }
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<LockScreenEntry>) -> ()) {
-        let entry = LockScreenEntry(date: Date(), todos: loadTodos())
-        let timeline = Timeline(entries: [entry], policy: .atEnd)
+        let currentDate = Date()
+        let todos = loadTodos()
+        print("Widget timeline: Found \(todos.count) todos")
+        
+        // Create a single entry that updates frequently
+        let entry = LockScreenEntry(date: currentDate, todos: todos)
+        let nextUpdate = Calendar.current.date(byAdding: .minute, value: 5, to: currentDate) ?? currentDate
+        let timeline = Timeline(entries: [entry], policy: .after(nextUpdate))
+        
         completion(timeline)
     }
     
     private func loadTodos() -> [TodoItem] {
-        if let todosData = userDefaults.data(forKey: "todos"),
-           let todos = try? JSONDecoder().decode([TodoItem].self, from: todosData) {
-            return todos.filter { !$0.isCompleted }
+        do {
+            guard let todosData = userDefaults.data(forKey: "todos") else {
+                print("Widget: No data in UserDefaults")
+                return []
+            }
+            
+            let todos = try JSONDecoder().decode([TodoItem].self, from: todosData)
+            let incompleteTodos = todos.filter { !$0.isCompleted }
+            print("Widget: Successfully loaded \(incompleteTodos.count) incomplete todos")
+            return incompleteTodos
+        } catch {
+            print("Widget: Failed to decode todos - \(error)")
+            return []
         }
-        return []
     }
 }
 
@@ -118,10 +136,7 @@ struct LockScreenWidget: Widget {
         }
         .configurationDisplayName("Tasks")
         .description("View your upcoming tasks.")
-        .supportedFamilies([
-            .accessoryCircular,
-            .accessoryRectangular,
-            .accessoryInline
-        ])
+        .supportedFamilies([.accessoryCircular, .accessoryRectangular, .accessoryInline])
+        .contentMarginsDisabled()
     }
 } 

@@ -81,10 +81,13 @@ struct TodayView: View {
     }
     
     var overdueTasks: [TodoItem] {
+        let calendar = Calendar.current
         let now = Date()
+        let startOfToday = calendar.startOfDay(for: now)
+        
         return viewModel.todos.compactMap { todo in
             guard let dueDate = todo.dueDate,
-                  dueDate < now,
+                  calendar.startOfDay(for: dueDate) < startOfToday,
                   !todo.isCompleted else {
                 return nil
             }
@@ -637,7 +640,14 @@ struct TaskListView: View {
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarBackground(Material.thinMaterial, for: .navigationBar)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
                         dismiss()
@@ -684,7 +694,6 @@ struct CalendarEventsView: View {
                     .padding(.vertical, 8) // Add vertical padding for better spacing
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 16))
-                .listRowSeparator(.hidden) // Optional: hide separators for cleaner look
             }
             .navigationTitle("\(Calendar.current.isDateInToday(events.first?.startDate ?? Date()) ? "Today" : "Tomorrow")'s Events")
             .navigationBarTitleDisplayMode(.inline)

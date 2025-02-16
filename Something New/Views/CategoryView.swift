@@ -9,7 +9,7 @@ struct CategoryView: View {
     
     var filteredTodos: [TodoItem] {
         viewModel.todos
-            .filter { $0.category == category && !$0.isCompleted }
+            .filter { $0.category.rawValue == category.rawValue && !$0.isCompleted }
             .sorted { todo1, todo2 in
                 if let date1 = todo1.dueDate {
                     if let date2 = todo2.dueDate {
