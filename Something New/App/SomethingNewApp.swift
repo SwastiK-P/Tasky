@@ -23,10 +23,9 @@ struct SomethingNewApp: App {
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                 themeManager.handleTraitCollectionChange()
             }
-            .overlay {
-                if let data = imageViewerData {
-                    ImageViewer(image: data.image)
-                }
+            .sheet(item: $imageViewerData) { data in
+                ImageViewer(image: data.image)
+                    .environmentObject(themeManager)
             }
         }
     }
@@ -61,5 +60,12 @@ struct WidgetConfigView: View {
                 }
             }
         }
+    }
+}
+
+// Make ImageViewerData conform to Identifiable
+extension ImageViewerData: Identifiable {
+    var id: String {
+        image.hashValue.description
     }
 } 

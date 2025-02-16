@@ -14,6 +14,7 @@ struct SettingsView: View {
     @AppStorage("dailyReminderTime") private var dailyReminderTime = Calendar.current.date(from: DateComponents(hour: 20, minute: 0)) ?? Date()
     @State private var notificationStatus: UNAuthorizationStatus = .notDetermined
     @StateObject var licenseManager = LicenseManager.shared
+    @StateObject private var calendarManager = CalendarManager.shared
     
     private let themes = [
         AppTheme(name: "Default", color: .black, darkModeColor: .white, iconName: "AppIcon-Preview"),
@@ -29,6 +30,7 @@ struct SettingsView: View {
                 feedbackSection
                 defaultsSection
                 notificationsSection
+                calendarSelectionSection
                 themeSection
                 aboutSection
                 securitySection
@@ -288,6 +290,29 @@ struct SettingsView: View {
             Text("Coming Soon")
         } footer: {
             Text("Add tasks quickly using Siri when developer account is set up")
+        }
+    }
+    
+    private var calendarSelectionSection: some View {
+        Section("Calendar Integration") {
+            if calendarManager.hasCalendarAccess {
+                NavigationLink {
+                    CalendarSelectionView()
+                } label: {
+                    HStack {
+                        Image(systemName: "calendar")
+                            .frame(width: 25)
+                        Text("Selected Calendars")
+                        Spacer()
+                        Text("\(calendarManager.selectedCalendarCount)")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            } else {
+                Button("Allow Calendar Access") {
+                    calendarManager.requestAccess()
+                }
+            }
         }
     }
     
@@ -559,5 +584,30 @@ struct ThemedPickerView: View {
             .tint(themeManager.currentColor)
         }
         .frame(height: 28)
+    }
+}
+
+struct CalendarSelectionView: View {
+    @StateObject private var calendarManager = CalendarManager.shared
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        List {
+            ForEach(calendarManager.availableCalendars, id: \.calendarIdentifier) { calendar in
+                Toggle(isOn: Binding(
+                    get: { calendarManager.isCalendarSelected(calendar) },
+                    set: { _ in calendarManager.toggleCalendarSelection(calendar) }
+                )) {
+                    HStack {
+                        Circle()
+                            .fill(Color(cgColor: calendar.cgColor))
+                            .frame(width: 12, height: 12)
+                        Text(calendar.title)
+                    }
+                }
+            }
+        }
+        .navigationTitle("Calendars")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

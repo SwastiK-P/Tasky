@@ -23,7 +23,7 @@ struct LockScreenProvider: TimelineProvider {
     private func loadTodos() -> [TodoItem] {
         if let todosData = userDefaults.data(forKey: "todos"),
            let todos = try? JSONDecoder().decode([TodoItem].self, from: todosData) {
-            return Array(todos.filter { !$0.isCompleted }.prefix(2))
+            return todos.filter { !$0.isCompleted }
         }
         return []
     }

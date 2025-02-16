@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ImageViewer: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var colorScheme
+    @EnvironmentObject private var themeManager: ThemeManager
     let image: UIImage
     @State private var scale: CGFloat = 1
     @State private var lastScale: CGFloat = 1
@@ -10,35 +12,16 @@ struct ImageViewer: View {
     
     var body: some View {
         NavigationView {
-            GeometryReader { geometry in
+            ZStack {
+                Color(uiColor: .systemBackground)
+                    .ignoresSafeArea()
+                
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .scaleEffect(scale)
                     .offset(offset)
-                    .gesture(
-                        MagnificationGesture()
-                            .onChanged { value in
-                                let delta = value / lastScale
-                                lastScale = value
-                                scale *= delta
-                            }
-                            .onEnded { _ in
-                                lastScale = 1
-                            }
-                    )
-                    .gesture(
-                        DragGesture()
-                            .onChanged { value in
-                                offset = CGSize(
-                                    width: lastOffset.width + value.translation.width,
-                                    height: lastOffset.height + value.translation.height
-                                )
-                            }
-                            .onEnded { _ in
-                                lastOffset = offset
-                            }
-                    )
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .gesture(
                         TapGesture(count: 2)
                             .onEnded {
@@ -52,17 +35,25 @@ struct ImageViewer: View {
                             }
                     )
             }
+            .navigationTitle("Image")
+            .toolbarBackground(.visible, for: .navigationBar)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         dismiss()
                     } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .imageScale(.large)
+                        Text("Done")
+                            .fontWeight(.semibold)
+                            .foregroundColor(themeManager.currentColor)
                     }
                 }
             }
         }
     }
+}
+
+#Preview {
+    ImageViewer(image: UIImage(systemName: "photo")!)
+        .environmentObject(ThemeManager())
 } 

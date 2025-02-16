@@ -18,12 +18,13 @@ struct TodoItem: Identifiable, Codable {
     var priority: Priority
     var images: [String]?
     var notificationId: String?
+    var completedDate: Date?
     
     enum Priority: String, Codable, CaseIterable {
         case low, medium, high
     }
     
-    init(id: UUID = UUID(), title: String, isCompleted: Bool = false, dueDate: Date? = nil, dueTime: Date? = nil, category: Category = .personal, notes: String? = nil, priority: Priority = .medium, images: [String]? = nil, notificationId: String? = nil) {
+    init(id: UUID = UUID(), title: String, isCompleted: Bool = false, dueDate: Date? = nil, dueTime: Date? = nil, category: Category = .personal, notes: String? = nil, priority: Priority = .medium, images: [String]? = nil, notificationId: String? = nil, completedDate: Date? = nil) {
         self.id = id
         self.title = title
         self.isCompleted = isCompleted
@@ -34,5 +35,6 @@ struct TodoItem: Identifiable, Codable {
         self.priority = priority
         self.images = images
         self.notificationId = notificationId
+        self.completedDate = completedDate
     }
 }

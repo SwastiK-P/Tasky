@@ -44,7 +44,10 @@ final class TodoListViewModel: ObservableObject {
     
     func toggleTodo(_ todo: TodoItem) {
         if let index = todos.firstIndex(where: { $0.id == todo.id }) {
-            todos[index].isCompleted.toggle()
+            var updatedTodo = todo
+            updatedTodo.isCompleted.toggle()
+            updatedTodo.completedDate = updatedTodo.isCompleted ? Date() : nil
+            todos[index] = updatedTodo
             
             // If todo is completed and has a notification, remove it
             if todos[index].isCompleted, let notificationId = todos[index].notificationId {
@@ -75,19 +78,7 @@ final class TodoListViewModel: ObservableObject {
         if let encoded = try? JSONEncoder().encode(todos) {
             userDefaults.set(encoded, forKey: "todos")
             userDefaults.synchronize()
-            
-            // Force immediate widget updates
             WidgetCenter.shared.reloadAllTimelines()
-            WidgetCenter.shared.getCurrentConfigurations { result in
-                switch result {
-                case .success(let widgets):
-                    widgets.forEach { widget in
-                        WidgetCenter.shared.reloadTimelines(ofKind: widget.kind)
-                    }
-                case .failure:
-                    break
-                }
-            }
         }
     }
     

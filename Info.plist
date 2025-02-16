@@ -45,6 +45,10 @@
 	</array>
 	<key>IntentsSupported</key>
 	<string>AddTaskIntent</string>
+	<key>NSCalendarUsageDescription</key>
+	<string>We need access to your calendar to show your upcoming events</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>We need access to your calendar to show your upcoming events</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>SelectCategoryIntent</string>

@@ -54,7 +54,7 @@ struct TodoRowView: View {
                     if let images = todo.images, !images.isEmpty {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 4) {
-                                ForEach(Array(images.prefix(4).enumerated()), id: \.element) { index, imageName in
+                                ForEach(Array(images.prefix(5).enumerated()), id: \.element) { index, imageName in
                                     if let image = loadImage(named: imageName) {
                                         Button(action: {
                                             selectedImageIndex = index

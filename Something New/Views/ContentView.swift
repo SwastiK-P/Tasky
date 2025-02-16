@@ -8,6 +8,7 @@ struct ContentView: View {
     @State private var selectedTab = 0
     @State private var showCompletedTodos = false
     @Binding var imageViewerData: ImageViewerData?
+    @State private var currentDate = Date()
     @AppStorage("selectedIconStyle") private var selectedIconStyle = "Default"
     @State private var accentColor: Color = .black
     @StateObject private var authManager = AuthenticationManager.shared
@@ -31,6 +32,7 @@ struct ContentView: View {
                         .ignoresSafeArea()
                     
                     TabView(selection: $selectedTab) {
+                        todayTab
                         dashboardTab
                         todoListTab
                     }
@@ -94,7 +96,7 @@ struct ContentView: View {
             Label("Dashboard", systemImage: "chart.bar.fill")
                 .environment(\.colorScheme, .light)
         }
-        .tag(0)
+        .tag(1)
     }
     
     private var settingsButton: some View {
@@ -118,10 +120,23 @@ struct ContentView: View {
             )
         }
         .tabItem {
-            Label("Tasks", systemImage: "checklist")
+            Label("Tasks", systemImage: "checkmark.circle.fill")
                 .environment(\.colorScheme, .light)
         }
-        .tag(1)
+        .tag(2)
+    }
+    
+    private var todayTab: some View {
+        NavigationStack {
+            TodayView(
+                viewModel: viewModel
+            )
+        }
+        .tabItem {
+            Label("Today", systemImage: "\(Calendar.current.component(.day, from: currentDate)).circle.fill")
+                .environment(\.colorScheme, .light)
+        }
+        .tag(0)
     }
 }
 
