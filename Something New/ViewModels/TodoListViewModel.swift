@@ -18,6 +18,15 @@ final class TodoListViewModel: ObservableObject {
     init() {
         loadData()
         setupSubscriptions()
+        updateBadgeCount()
+        
+        // Listen for data import notifications
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleDataImport),
+            name: .dataImported,
+            object: nil
+        )
     }
     
     private func setupSubscriptions() {
@@ -99,6 +108,12 @@ final class TodoListViewModel: ObservableObject {
         }
     }
     
+    @objc private func handleDataImport() {
+        loadData()
+        objectWillChange.send()
+        updateBadgeCount()
+    }
+    
     private func loadData() {
         if let todosData = userDefaults.data(forKey: "todos"),
            let decodedTodos = try? JSONDecoder().decode([TodoItem].self, from: todosData) {
@@ -151,5 +166,24 @@ final class TodoListViewModel: ObservableObject {
         case .medium: return 2
         case .low: return 1
         }
+    }
+    
+    func updateBadgeCount() {
+        let overdueCount = todos.filter { todo in
+            guard let dueDate = todo.dueDate else { return false }
+            return isPastDue(dueDate) && !todo.isCompleted
+        }.count
+        
+        // Update the badge count on the app icon
+        DispatchQueue.main.async {
+            UIApplication.shared.applicationIconBadgeNumber = overdueCount
+        }
+    }
+    
+    private func isPastDue(_ date: Date) -> Bool {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let dueDay = calendar.startOfDay(for: date)
+        return dueDay < today
     }
 } 

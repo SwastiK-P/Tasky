@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A09EF282D69C67F00E4F511 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7A09EF272D69C67F00E4F511 /* ZIPFoundation */; };
 		7A590B542D590E840023D97A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A590B532D590E830023D97A /* WidgetKit.framework */; };
 		7A590B562D590E840023D97A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A590B552D590E840023D97A /* SwiftUI.framework */; };
 		7A590B672D590E860023D97A /* TodoWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7A590B512D590E830023D97A /* TodoWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -259,6 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A590B802D590F2E0023D97A /* SharedModels.framework in Frameworks */,
+				7A09EF282D69C67F00E4F511 /* ZIPFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,6 +421,7 @@
 			);
 			name = "Something New";
 			packageProductDependencies = (
+				7A09EF272D69C67F00E4F511 /* ZIPFoundation */,
 			);
 			productName = "Something New";
 			productReference = 7ACC69CA2D586D2A007FF0FE /* Something New.app */;
@@ -483,6 +486,9 @@
 			);
 			mainGroup = 7ACC69C12D586D2A007FF0FE;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				7A09EF262D69C66800E4F511 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7ACC69CB2D586D2A007FF0FE /* Products */;
 			projectDirPath = "";
@@ -938,7 +944,10 @@
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Tasky;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Unlock app";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "we need access to your location to show your current location in add location";
+				INFOPLIST_KEY_NSLocationUsageDescription = "we need access to your location to show your current location in add location";
 				INFOPLIST_KEY_NSSiriUsageDescription = "Allow Siri to add tasks to your list";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -946,11 +955,12 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.2;
+				MARKETING_VERSION = 0.25;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.swastik.Something-New";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -979,7 +989,10 @@
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Tasky;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Unlock app";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "we need access to your location to show your current location in add location";
+				INFOPLIST_KEY_NSLocationUsageDescription = "we need access to your location to show your current location in add location";
 				INFOPLIST_KEY_NSSiriUsageDescription = "Allow Siri to add tasks to your list";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -987,11 +1000,12 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.2;
+				MARKETING_VERSION = 0.25;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.swastik.Something-New";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1114,6 +1128,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7A09EF262D69C66800E4F511 /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/weichsel/ZIPFoundation.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.19;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7A09EF272D69C67F00E4F511 /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7A09EF262D69C66800E4F511 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7ACC69C22D586D2A007FF0FE /* Project object */;
 }

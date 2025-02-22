@@ -84,14 +84,22 @@ struct TodayView: View {
         let calendar = Calendar.current
         let now = Date()
         let startOfToday = calendar.startOfDay(for: now)
+        let hour = calendar.component(.hour, from: now)
+        let isEvening = hour >= 17  // Consider tasks overdue after 5 PM
         
         return viewModel.todos.compactMap { todo in
             guard let dueDate = todo.dueDate,
-                  calendar.startOfDay(for: dueDate) < startOfToday,
                   !todo.isCompleted else {
                 return nil
             }
-            return todo
+            
+            let dueStartOfDay = calendar.startOfDay(for: dueDate)
+            
+            if dueStartOfDay < startOfToday || 
+               (isEvening && calendar.isDateInToday(dueDate)) {
+                return todo
+            }
+            return nil
         }
     }
     
@@ -101,6 +109,9 @@ struct TodayView: View {
                 .font(.system(size: 34, weight: .bold))
             Text("Swastik")
                 .font(.system(size: 34, weight: .bold))
+            Text("\(Date.now.formatted(.dateTime.day().month(.wide).year()))")
+                .font(.headline)
+                .foregroundStyle(.secondary)
         }
     }
     
@@ -191,7 +202,6 @@ struct SummaryTextView: View {
                         showingCalendarEvents: $showingCalendarEvents
                     )
                 } else {
-                    // Completed Tasks
                     if !completedTasks.isEmpty {
                         Button {
                             let generator = UIImpactFeedbackGenerator(style: .light)
@@ -220,7 +230,6 @@ struct SummaryTextView: View {
                         }
                     }
                     
-                    // Tomorrow's Tasks
                     if !tomorrowTasks.isEmpty {
                         Button {
                             let generator = UIImpactFeedbackGenerator(style: .light)
@@ -277,7 +286,6 @@ struct SummaryTextView: View {
                         }
                     }
                     
-                    // Priority Tasks
                     if !priorityTasks.isEmpty {
                         Button {
                             let generator = UIImpactFeedbackGenerator(style: .light)
@@ -310,7 +318,6 @@ struct SummaryTextView: View {
                         }
                     }
                     
-                    // Overdue Tasks
                     if !overdueTasks.isEmpty {
                         Button {
                             let generator = UIImpactFeedbackGenerator(style: .light)
@@ -348,7 +355,6 @@ struct SummaryTextView: View {
                         showingCalendarEvents: $showingCalendarEvents
                     )
                 } else {
-                    // Today's Tasks
                     if !todayTasks.isEmpty {
                         Button {
                             let generator = UIImpactFeedbackGenerator(style: .light)
@@ -377,7 +383,6 @@ struct SummaryTextView: View {
                         }
                     }
                     
-                    // Calendar Events
                     if hasCalendarAccess && !calendarEvents.isEmpty {
                         Button {
                             let generator = UIImpactFeedbackGenerator(style: .light)
@@ -406,7 +411,6 @@ struct SummaryTextView: View {
                         }
                     }
                     
-                    // Overdue Tasks
                     if !overdueTasks.isEmpty {
                         Button {
                             let generator = UIImpactFeedbackGenerator(style: .light)
@@ -425,7 +429,7 @@ struct SummaryTextView: View {
                                     HStack {
                                         Text("From earlier ")
                                             .foregroundColor(.secondary) +
-                                        Text("\(overdueTasks.count) \(overdueTasks.count == 1 ? "task is" : "tasks are") overdue")
+                                        Text("\(overdueTasks.count) \(overdueTasks.count == 1 ? "task is" : "task are") overdue")
                                             .foregroundColor(.orange)
                                     }
                                     .font(.title3)
@@ -626,6 +630,7 @@ struct TaskListView: View {
     let tasks: [TodoItem]
     @ObservedObject var viewModel: TodoListViewModel
     @Environment(\.dismiss) private var dismiss
+    @State private var imageViewerData: ImageViewerData?
     
     var body: some View {
         NavigationView {
@@ -634,7 +639,7 @@ struct TaskListView: View {
                     todo: todo,
                     toggleAction: { viewModel.toggleTodo(todo) },
                     viewModel: viewModel,
-                    imageViewerData: .constant(nil)
+                    imageViewerData: $imageViewerData
                 )
             }
             .navigationTitle(title)
@@ -654,6 +659,9 @@ struct TaskListView: View {
                     }
                 }
             }
+            .fullScreenCover(item: $imageViewerData) { data in
+                ImageViewer(image: data.image)
+            }
         }
         .presentationDetents([.medium, .large])
     }
@@ -666,34 +674,10 @@ struct CalendarEventsView: View {
     var body: some View {
         NavigationView {
             List(events, id: \.eventIdentifier) { event in
-                HStack(spacing: 0) {
-                    Rectangle()
-                        .fill(Color(cgColor: event.calendar.cgColor))
-                        .frame(width: 6)
-                        .frame(maxHeight: .infinity) // This makes it full height
-                    
-                    VStack(alignment: .leading) {
-                        Text(event.title)
-                            .font(.headline)
-                        if let location = event.location, !location.isEmpty {
-                            Text(location)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                        Text(event.startDate, style: .time)
-                            .font(.caption)
-                            .foregroundColor(.secondary) +
-                        Text(" - ")
-                            .font(.caption)
-                            .foregroundColor(.secondary) +
-                        Text(event.endDate, style: .time)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    .padding(.leading, 12)
-                    .padding(.vertical, 8) // Add vertical padding for better spacing
-                }
-                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 16))
+                CalendarEventRowView(event: event)
+                    .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
             }
             .navigationTitle("\(Calendar.current.isDateInToday(events.first?.startDate ?? Date()) ? "Today" : "Tomorrow")'s Events")
             .navigationBarTitleDisplayMode(.inline)
@@ -707,6 +691,45 @@ struct CalendarEventsView: View {
             }
         }
         .presentationDetents([.medium, .large])
+    }
+}
+
+struct CalendarEventRowView: View {
+    let event: EKEvent
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            Rectangle()
+                .fill(Color(cgColor: event.calendar.cgColor))
+                .frame(width: 6)
+                .frame(maxHeight: .infinity)
+            
+            VStack(alignment: .leading) {
+                Text(event.title)
+                    .font(.headline)
+                if let location = event.location, !location.isEmpty {
+                    Text(location)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                Text(event.startDate, style: .time)
+                    .font(.caption)
+                    .foregroundColor(.secondary) +
+                Text(" - ")
+                    .font(.caption)
+                    .foregroundColor(.secondary) +
+                Text(event.endDate, style: .time)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding(.leading, 12)
+            .padding(.vertical, 8)
+            
+            Spacer()
+        }
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
     }
 }
 

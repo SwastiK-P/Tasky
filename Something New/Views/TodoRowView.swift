@@ -25,6 +25,8 @@ struct TodoRowView: View {
     @State private var shouldAnimate = false
     @State private var showingWorkSession = false
     @State private var showingDetails = false
+    @State private var showingLocationSheet = false
+    @State private var selectedLocation: TodoItem.Location?
     
     var body: some View {
         mainContent
@@ -36,6 +38,11 @@ struct TodoRowView: View {
             .onChange(of: workSessionViewModel.isPaused) { isPaused in
                 if isPaused {
                     showingWorkSession = true
+                }
+            }
+            .sheet(isPresented: $showingLocationSheet) {
+                if let location = selectedLocation {
+                    LocationDetailView(location: location)
                 }
             }
     }
@@ -64,7 +71,7 @@ struct TodoRowView: View {
             WorkSessionView(workSessionViewModel: workSessionViewModel, todoViewModel: viewModel, todo: todo)
         }
         .sheet(isPresented: $showingDetails) {
-            TodoDetailsView(todo: todo, viewModel: viewModel)
+            TodoDetailsView(todo: todo, viewModel: viewModel, imageViewerData: $imageViewerData)
                 .presentationDetents([.medium, .large])
         }
         .onAppear {
@@ -108,16 +115,28 @@ struct TodoRowView: View {
             
             if let url = detectedURL {
                 urlPreview(url)
-            } else if let note = todo.notes {
-                Text(note)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+            } else if let note = todo.notes, !note.isEmpty {
+                if !note.isEmpty && note.count > 75 {
+                    HStack(spacing: 3) {
+                        Image(systemName: "note.text")
+                        Text("Note")
+                    }
+                        .font(.caption)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .foregroundStyle(.secondary)
+                        .background(Color(.gray).opacity(0.2))
+                        .cornerRadius(8)
+                } else {
+                    Text(note)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
             
-            if let images = todo.images, !images.isEmpty {
+            if let images = todo.images, !images.isEmpty, images.contains(where: { !$0.isEmpty }) {
                 imageScrollView(images)
             }
-            
             tagsRow
         }
     }
@@ -126,10 +145,15 @@ struct TodoRowView: View {
         HStack(spacing: 8) {
             categoryTag
             if let dueDate = todo.dueDate {
-                dueDateTag(dueDate)
+                if todo.priority != .high || todo.location == nil {
+                    dueDateTag(dueDate)
+                }
             }
             if todo.priority == .high {
                 priorityTag
+            }
+            if todo.location != nil {
+                locationTag
             }
         }
     }
@@ -145,7 +169,10 @@ struct TodoRowView: View {
     }
     
     private func dueDateTag(_ date: Date) -> some View {
-        Text(date, style: .date)
+        HStack(spacing: 3) {
+            Image(systemName: "calendar")
+            Text(date.formatted(.dateTime.day().month(.abbreviated).year()))
+        }
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             .font(.caption)
@@ -155,13 +182,39 @@ struct TodoRowView: View {
     }
     
     private var priorityTag: some View {
-        Text("Priority")
+        HStack(spacing: 3) {
+            Image(systemName: "exclamationmark.triangle.fill")
+            Text("Priority")
+        }
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             .font(.caption)
             .foregroundStyle(.red)
             .background(Color(.red).opacity(0.2))
             .cornerRadius(8)
+    }
+    
+    private var locationTag: some View {
+        HStack(spacing: 3) {
+            Image(systemName: "location.fill")
+            Text("Location")
+        }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .font(.caption)
+            .foregroundStyle(.blue)
+            .background(Color.blue.opacity(0.2))
+            .cornerRadius(8)
+            .onTapGesture {
+                if let location = todo.location {
+                    showLocationDetail(location)
+                }
+            }
+    }
+    
+    private func showLocationDetail(_ location: TodoItem.Location) {
+        selectedLocation = location
+        showingLocationSheet = true
     }
     
     private func urlPreview(_ url: URL) -> some View {
@@ -182,7 +235,7 @@ struct TodoRowView: View {
                 }
             }
             .padding(.vertical, 4)
-        }
+        }.scrollDisabled(true)
     }
     
     private func imageButton(image: UIImage, index: Int) -> some View {

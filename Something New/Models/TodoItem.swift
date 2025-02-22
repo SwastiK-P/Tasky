@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TodoItem: Identifiable, Codable {
+struct TodoItem: Identifiable, Codable, Equatable {
     let id: UUID
     var title: String
     var notes: String?
@@ -20,12 +20,20 @@ struct TodoItem: Identifiable, Codable {
     var notificationId: String?
     var completedDate: Date?
     var workSessions: [WorkSession]?
+    var location: Location?
     
-    enum Priority: String, Codable, CaseIterable {
+    struct Location: Codable, Equatable {
+        var latitude: Double
+        var longitude: Double
+        var name: String
+        var address: String
+    }
+    
+    enum Priority: String, Codable, CaseIterable, Equatable {
         case low, medium, high
     }
     
-    init(id: UUID = UUID(), title: String, isCompleted: Bool = false, dueDate: Date? = nil, dueTime: Date? = nil, category: Category = .personal, notes: String? = nil, priority: Priority = .medium, images: [String]? = nil, notificationId: String? = nil, completedDate: Date? = nil, workSessions: [WorkSession]? = nil) {
+    init(id: UUID = UUID(), title: String, isCompleted: Bool = false, dueDate: Date? = nil, dueTime: Date? = nil, category: Category = .personal, notes: String? = nil, priority: Priority = .medium, images: [String]? = nil, notificationId: String? = nil, completedDate: Date? = nil, workSessions: [WorkSession]? = nil, location: Location? = nil) {
         self.id = id
         self.title = title
         self.isCompleted = isCompleted
@@ -38,5 +46,6 @@ struct TodoItem: Identifiable, Codable {
         self.notificationId = notificationId
         self.completedDate = completedDate
         self.workSessions = workSessions
+        self.location = location
     }
 }

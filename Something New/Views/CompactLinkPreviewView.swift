@@ -12,7 +12,6 @@ struct CompactLinkPreviewView: View {
     var body: some View {
         Group {
             if isLoading {
-                // Placeholder while loading
                 HStack(spacing: 8) {
                     RoundedRectangle(cornerRadius: 8)
                         .fill(Color.gray.opacity(0.2))
@@ -79,7 +78,7 @@ struct CompactLinkPreviewView: View {
                 }
             }
         }
-        .padding(.bottom, 4) // Add bottom padding
+        .padding(.bottom, 4)
         .task {
             await loadMetadata()
         }

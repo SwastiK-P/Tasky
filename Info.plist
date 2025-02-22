@@ -63,5 +63,62 @@
 		<string>audio</string>
 		<string>processing</string>
 	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Tasky Backup File</string>
+			<key>UTTypeIconFiles</key>
+			<array/>
+			<key>UTTypeIdentifier</key>
+			<string>com.swastik.Something-New.backup</string>
+			<key>UTTypeReferenceURL</key>
+			<string>public.filename-extension</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>taskybackup</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-taskybackup</string>
+				</array>
+			</dict>
+		</dict>
+		<dict/>
+	</array>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Tasky Backup File</string>
+			<key>UTTypeIconFiles</key>
+			<array/>
+			<key>UTTypeIdentifier</key>
+			<string>com.swastik.Something-New.backup</string>
+			<key>UTTypeReferenceURL</key>
+			<string>public.filename-extension</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>taskybackup</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-taskybackup</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>

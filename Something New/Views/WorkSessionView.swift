@@ -61,7 +61,7 @@ struct WorkSessionView: View {
                     }
                     updatedTodo.workSessions = sessions
                     todoViewModel.updateTodo(updatedTodo)
-                    
+                    FeedbackManager.shared.playHaptic(style: .light)
                     todoViewModel.objectWillChange.send()
                     workSessionViewModel.resetSession()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -181,6 +181,7 @@ struct WorkSessionView: View {
                         workSessionViewModel.startSession(for: todo.id, duration: selectedDuration)
                     }
                 }
+                    .fontWeight(.semibold)
                 .disabled(customHours == 0 && customMinutes == 0)
             )
         }

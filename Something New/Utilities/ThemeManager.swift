@@ -1,6 +1,8 @@
 import SwiftUI
 
 class ThemeManager: ObservableObject {
+    static let shared = ThemeManager()
+    
     @AppStorage("appTheme") private var appTheme = "Default"
     @Published var currentColor: Color = .black
     

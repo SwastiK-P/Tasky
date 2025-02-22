@@ -14,10 +14,11 @@ class NotificationManager: ObservableObject {
     }
     
     func requestNotificationPermission(completion: @escaping (Bool) -> Void) {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, _ in
-            DispatchQueue.main.async {
-                completion(granted)
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+            if let error = error {
+                print("Error requesting notification permission: \(error)")
             }
+            completion(granted)
         }
     }
     

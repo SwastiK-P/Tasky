@@ -19,6 +19,10 @@ struct EditTodoView: View {
     @State private var existingImages: [String] = []
     @State private var notificationStatus: UNAuthorizationStatus = .authorized
     @State private var showingNotificationAlert = false
+    @State private var showingImagePicker = false
+    @State private var showingLocationPicker = false
+    @State private var location: TodoItem.Location?
+    @FocusState private var isNotesFocused: Bool
     
     @EnvironmentObject private var themeManager: ThemeManager
     
@@ -39,6 +43,7 @@ struct EditTodoView: View {
         _priority = State(initialValue: todo.priority)
         _category = State(initialValue: todo.category)
         _existingImages = State(initialValue: todo.images ?? [])
+        _location = State(initialValue: todo.location)
     }
     
     var body: some View {
@@ -46,8 +51,10 @@ struct EditTodoView: View {
             Form {
                 Section {
                     TextField("Title", text: $title)
+                    
                     TextField("Notes", text: $notes, axis: .vertical)
                         .lineLimit(3...6)
+                        .focused($isNotesFocused)
                 }
                 
                 Section {
@@ -91,6 +98,11 @@ struct EditTodoView: View {
                     if showDueTime && notificationStatus == .denied {
                         Text("Notifications are disabled. Enable them in Settings to set reminders.")
                             .foregroundStyle(.orange)
+                            .onTapGesture {
+                                if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                                    UIApplication.shared.open(appSettings)
+                                }
+                            }
                     }
                 }
                 
@@ -119,6 +131,38 @@ struct EditTodoView: View {
                         FeedbackManager.shared.playHaptic(style: .light)
                     }
                 }
+                
+                Section {
+                    if let location = location {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(location.name)
+                                .font(.headline)
+                            
+                            Text(location.address)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        Button(role: .destructive) {
+                            FeedbackManager.shared.playHaptic(style: .light)
+                            self.location = nil
+                        } label: {
+                            HStack {
+                                Text("Remove Location")
+                                Spacer()
+                            }
+                                .frame(maxWidth: .infinity)
+                        }
+                    } else {
+                        Button("Add Location") {
+                            showingLocationPicker = true
+                        }
+                    }
+                } header: {
+                    Text("Location")
+                }
+                
                 
                 Section("Images") {
                     // Show existing images
@@ -201,6 +245,9 @@ struct EditTodoView: View {
                 }
             }
         }
+        .sheet(isPresented: $showingLocationPicker) {
+            LocationPicker(selectedLocation: $location)
+        }
         .onAppear {
             NotificationManager.shared.checkNotificationStatus { status in
                 notificationStatus = status
@@ -223,14 +270,21 @@ struct EditTodoView: View {
     private func saveImages() -> [String] {
         var imageNames: [String] = []
         
-        if let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            for image in selectedImages {
-                let imageName = UUID().uuidString + ".jpg"
-                let imagePath = documentsPath.appendingPathComponent(imageName)
-                
-                if let imageData = image.jpegData(compressionQuality: 0.7) {
-                    try? imageData.write(to: imagePath)
+        guard let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            print("Error: Could not access documents directory")
+            return []
+        }
+        
+        for image in selectedImages {
+            let imageName = UUID().uuidString + ".jpg"
+            let imagePath = documentsPath.appendingPathComponent(imageName)
+            
+            if let imageData = image.jpegData(compressionQuality: 0.7) {
+                do {
+                    try imageData.write(to: imagePath)
                     imageNames.append(imageName)
+                } catch {
+                    print("Error saving image: \(error.localizedDescription)")
                 }
             }
         }
@@ -265,17 +319,25 @@ struct EditTodoView: View {
         }
         
         let notificationId = enableReminder ? UUID().uuidString : nil
-        let updatedTodo = TodoItem(
+        
+        // Save new images and combine with existing ones
+        let newImageNames = saveImages()
+        let allImages = existingImages + newImageNames
+        
+        var updatedTodo = TodoItem(
             id: todo.id,
             title: title,
             isCompleted: todo.isCompleted,
             dueDate: finalDueDate,
             dueTime: showDueTime ? dueTime : nil,
             category: category,
-            notes: notes.isEmpty ? nil : notes,
+            notes: notes,
             priority: priority,
-            images: existingImages + saveImages(),
-            notificationId: notificationId
+            images: allImages,
+            notificationId: notificationId,
+            completedDate: todo.completedDate,
+            workSessions: todo.workSessions,
+            location: location
         )
         
         if enableReminder, let dueDate = finalDueDate {

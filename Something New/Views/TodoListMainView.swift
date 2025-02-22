@@ -16,10 +16,9 @@ struct TodoListMainView: View {
             } else {
                 todoList
             }
-        }
-        .navigationTitle("Todo List")
-        .navigationBarItems(trailing: addButton)
-        .toolbarBackground(.automatic, for: .navigationBar)
+        }.navigationTitle("Tasks")
+            .navigationBarItems(trailing: addButton)
+            .toolbarBackground(.automatic, for: .navigationBar)
     }
     
     private var addButton: some View {

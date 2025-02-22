@@ -2,8 +2,66 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+	<key>UISupportsDocumentBrowser</key>
+	<true/>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Tasky Backup File</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.swastik.Something-New.backup</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>taskybackup</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-taskybackup</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Tasky Backup File</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.swastik.Something-New.backup</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>taskybackup</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-taskybackup</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 	<key>NSUserNotificationUsageDescription</key>
 	<string>We need permission to send you reminders for your todos</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location to add it to your todos</string>
+	<key>NSLocationUsageDescription</key>
+	<string>We need your location to add it to your todos</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string></string>

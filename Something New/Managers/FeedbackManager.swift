@@ -21,7 +21,6 @@ class FeedbackManager: ObservableObject {
     }
     
     private init() {
-        // Set default values if not set
         if !userDefaults.contains(key: "hapticsEnabled") {
             self.isHapticsEnabled = true
             userDefaults.set(true, forKey: "hapticsEnabled")
@@ -38,7 +37,7 @@ class FeedbackManager: ObservableObject {
         generator.prepare()
         generator.impactOccurred()
     }
-    
+        
     func playSound(_ effect: SoundEffect) {
         guard isSoundEnabled else { return }
         soundManager.playSound(effect)

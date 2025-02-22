@@ -13,7 +13,6 @@ struct SettingsView: View {
     @AppStorage("dailyReminderEnabled") private var isDailyReminderEnabled = false
     @AppStorage("dailyReminderTime") private var dailyReminderTime = Calendar.current.date(from: DateComponents(hour: 20, minute: 0)) ?? Date()
     @State private var notificationStatus: UNAuthorizationStatus = .notDetermined
-    @StateObject var licenseManager = LicenseManager.shared
     @StateObject private var calendarManager = CalendarManager.shared
     
     private let themes = [
@@ -34,7 +33,8 @@ struct SettingsView: View {
                 themeSection
                 aboutSection
                 securitySection
-                shortcutsSection
+                dataPrivacySection
+                //shortcutsSection
             }
             .navigationTitle("Settings")
             .toolbarBackground(.visible, for: .navigationBar)
@@ -215,6 +215,11 @@ struct SettingsView: View {
             if notificationStatus == .denied {
                 Text("Notifications are currently disabled. Enable them in Settings to receive reminders.")
                     .foregroundStyle(.orange)
+                    .onTapGesture {
+                        if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                            UIApplication.shared.open(appSettings)
+                        }
+                    }
             }
         }
     }
@@ -322,7 +327,7 @@ struct SettingsView: View {
                 SettingToggleRow(
                     title: "Lock App",
                     icon: "faceid",
-                    isOn: .init(
+                    isOn: Binding(
                         get: { authManager.isAppLocked },
                         set: { _ in
                             feedbackManager.playHaptic(style: .rigid)
@@ -335,7 +340,7 @@ struct SettingsView: View {
                     SettingToggleRow(
                         title: "Lock Immediately",
                         icon: "clock",
-                        isOn: .init(
+                        isOn: Binding(
                             get: { authManager.lockImmediately },
                             set: { _ in
                                 feedbackManager.playHaptic(style: .rigid)
@@ -351,6 +356,24 @@ struct SettingsView: View {
             if authManager.canUseBiometrics {
                 Text("Lock your app with \(authManager.biometricType) for added security")
             }
+        }
+    }
+    
+    private var dataPrivacySection: some View {
+        Section {
+            NavigationLink {
+                DataBackupView()
+            } label: {
+                HStack {
+                    Image(systemName: "arrow.trianglehead.2.clockwise.rotate.90")
+                        .frame(width: 25)
+                    Text("Backup & Restore")
+                }
+            }
+        } header: {
+            Text("Data & Privacy")
+        } footer: {
+            Text("Manage your data privacy settings here.")
         }
     }
     
@@ -549,10 +572,6 @@ struct SettingToggleRow: View {
             feedbackManager.playHaptic(style: .rigid)
         }
     }
-}
-
-extension Notification.Name {
-    static let appThemeChanged = Notification.Name("appThemeChanged")
 }
 
 // Helper extension to get app version

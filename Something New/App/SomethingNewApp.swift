@@ -40,26 +40,6 @@ struct SomethingNewApp: App {
     }
 }
 
-// Add this to your Info.plist:
-// <key>UIApplicationShortcutItems</key>
-// <array>
-//     <dict>
-//         <key>UIApplicationShortcutItemType</key>
-//         <string>AddTaskAction</string>
-//         <key>UIApplicationShortcutItemTitle</key>
-//         <string>Add Task</string>
-//         <key>UIApplicationShortcutItemIconSymbolName</key>
-//         <string>plus.circle.fill</string>
-//     </dict>
-//     <dict>
-//         <key>UIApplicationShortcutItemType</key>
-//         <string>AddPriorityTaskAction</string>
-//         <key>UIApplicationShortcutItemTitle</key>
-//         <string>Add Priority Task</string>
-//         <key>UIApplicationShortcutItemIconSymbolName</key>
-//         <string>exclamationmark.circle.fill</string>
-//     </dict>
-// </array>
 
 struct WidgetConfigView: View {
     @Environment(\.dismiss) private var dismiss

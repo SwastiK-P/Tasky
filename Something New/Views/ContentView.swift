@@ -10,10 +10,11 @@ struct ContentView: View {
     @Binding var imageViewerData: ImageViewerData?
     @State private var currentDate = Date()
     @AppStorage("selectedIconStyle") private var selectedIconStyle = "Default"
+    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
     @State private var accentColor: Color = .black
     @StateObject private var authManager = AuthenticationManager.shared
     @Environment(\.scenePhase) private var scenePhase
-    @StateObject private var licenseManager = LicenseManager.shared
+    @State private var isInitialized = false
     
     init(viewModel: TodoListViewModel, imageViewerData: Binding<ImageViewerData?>) {
         self._viewModel = ObservedObject(wrappedValue: viewModel)
@@ -21,52 +22,57 @@ struct ContentView: View {
     }
     
     var body: some View {
-        Group {
-            if licenseManager.isChecking {
-                Color.clear
-            } else if !licenseManager.isLicensed {
-                LicenseView()
-            } else {
-                ZStack {
-                    Color(.systemGroupedBackground)
-                        .ignoresSafeArea()
-                    
-                    TabView(selection: $selectedTab) {
-                        todayTab
-                        dashboardTab
-                        todoListTab
-                    }
-                    .toolbarBackground(.thinMaterial, for: .tabBar)
-                    .tint(themeManager.currentColor)
-                    .sheet(isPresented: $showingAddTodo) {
-                        AddTodoView(viewModel: viewModel)
-                    }
-                    .sheet(isPresented: $showingSettings) {
-                        SettingsView()
-                    }
-                    .onAppear {
-                        updateAccentColor()
-                    }
-                    .onReceive(NotificationCenter.default.publisher(for: Notification.Name("AppStyleChanged"))) { notification in
-                        if let style = notification.userInfo?["style"] as? String {
-                            withAnimation {
-                                accentColor = getAccentColor(for: style)
-                            }
-                        }
-                    }
-                    .onReceive(NotificationCenter.default.publisher(for: .showNewTaskSheet)) { _ in
-                        showingAddTodo = true
-                    }
-                    
-                    if authManager.isAppLocked && !authManager.isAuthenticated {
-                        LockView()
-                            .transition(.opacity)
+        ZStack {
+            Color(.systemGroupedBackground)
+                .ignoresSafeArea()
+            
+            TabView(selection: $selectedTab) {
+                todayTab
+                dashboardTab
+                todoListTab
+            }
+            .toolbarBackground(.thinMaterial, for: .tabBar)
+            .tint(themeManager.currentColor)
+            .onChange(of: selectedTab) { _ in
+                FeedbackManager.shared.playHaptic(style: .light)
+            }
+            .sheet(isPresented: $showingAddTodo) {
+                AddTodoView(viewModel: viewModel)
+            }
+            .sheet(isPresented: $showingSettings) {
+                SettingsView()
+            }
+            .sheet(isPresented: .init(
+                get: { !hasSeenOnboarding && isInitialized },
+                set: { hasSeenOnboarding = !$0 }
+            )) {
+                OnboardingView()
+            }
+            .task {
+                try? await Task.sleep(nanoseconds: 100_000_000)
+                isInitialized = true
+                updateAccentColor()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: Notification.Name("AppStyleChanged"))) { notification in
+                if let style = notification.userInfo?["style"] as? String {
+                    withAnimation {
+                        accentColor = getAccentColor(for: style)
                     }
                 }
-                .animation(.default, value: authManager.isAuthenticated)
-                .onChange(of: scenePhase) { phase in
-                    authManager.handleScenePhase(phase)
-                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .showNewTaskSheet)) { _ in
+                showingAddTodo = true
+            }
+            
+            if authManager.isAppLocked && !authManager.isAuthenticated && isInitialized {
+                LockView()
+                    .transition(.opacity)
+            }
+        }
+        .animation(.default, value: authManager.isAuthenticated)
+        .onChange(of: scenePhase) { phase in
+            if isInitialized {
+                authManager.handleScenePhase(phase)
             }
         }
     }
